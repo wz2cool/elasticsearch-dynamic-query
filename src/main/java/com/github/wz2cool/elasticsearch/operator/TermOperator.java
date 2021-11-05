@@ -1,6 +1,6 @@
 package com.github.wz2cool.elasticsearch.operator;
 
-public class TermOperator<T> {
+public class TermOperator<T> implements IFilterOperator<T> {
 
     private final T value;
 

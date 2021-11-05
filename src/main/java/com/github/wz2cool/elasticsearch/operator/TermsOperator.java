@@ -2,7 +2,7 @@ package com.github.wz2cool.elasticsearch.operator;
 
 import java.util.*;
 
-public class TermsOperator<T> {
+public class TermsOperator<T> implements IFilterOperator<T> {
 
     private List<T> value;
 

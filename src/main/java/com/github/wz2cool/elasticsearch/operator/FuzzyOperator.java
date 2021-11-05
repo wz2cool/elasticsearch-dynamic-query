@@ -1,6 +1,6 @@
 package com.github.wz2cool.elasticsearch.operator;
 
-public class FuzzyOperator {
+public class FuzzyOperator<T> implements IFilterOperator<T> {
 
     private final String value;
 
