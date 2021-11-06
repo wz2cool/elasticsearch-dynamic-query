@@ -67,6 +67,7 @@ public class ExampleTest {
     public void testTermInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(TestExampleES::getP1, o -> o.terms("", "1"))
+                .and(TestExampleES::getP9, o -> o.term(1))
                 .and(g -> g
                         .and(TestExampleES::getP1, o -> o.term("1")))
                 .and(TestExampleES::getP2, o -> o.range().gt(1).lt(2))

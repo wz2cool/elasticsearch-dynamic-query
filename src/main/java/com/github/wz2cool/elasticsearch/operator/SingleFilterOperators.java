@@ -3,7 +3,7 @@ package com.github.wz2cool.elasticsearch.operator;
 import java.util.Arrays;
 import java.util.Collection;
 
-public final class FilterOperators<R> {
+public final class SingleFilterOperators<R extends Comparable> {
 
     public TermOperator<R> term(R value) {
         return new TermOperator<>(value);
@@ -36,5 +36,13 @@ public final class FilterOperators<R> {
 
     public RangeOperator<R> range() {
         return new RangeOperator<>();
+    }
+
+    public WildcardOperator wildcard(String query) {
+        return new WildcardOperator(query);
+    }
+
+    public RegexpOperator regexp(String regexp) {
+        return new RegexpOperator(regexp);
     }
 }
