@@ -8,6 +8,7 @@ import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
 import org.apache.commons.lang3.ArrayUtils;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,18 +66,9 @@ public class ExampleTest {
 
     @Test
     public void testTermInteger() {
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
-                .and(TestExampleES::getP1, o -> o.terms("", "1"))
-                .and(TestExampleES::getP9, o -> o.term(1))
-                .and(g -> g
-                        .and(TestExampleES::getP1, o -> o.term("1")))
-                .and(TestExampleES::getP2, o -> o.range().gt(1).lt(2))
-                .and(g -> g
-                        .and(TestExampleES::getP1Hit, o -> o.terms("2")))
-                .and("test", o -> o
-                        .multiMatch(TestExampleES::getP1, TestExampleES::getP1Hit)
-                        .field(TestExampleES::getP1, 1.f)
-                        .minimumShouldMatch("100%"));
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(TestExampleES::getId, o -> o.range().gt(3L));
+        final QueryBuilder queryBuilder = query.buildQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
     }

@@ -1008,6 +1008,41 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     /// endregion
 
+    /// region custom
+
+    public S and(QueryBuilder queryBuilder) {
+        return and(true, FilterMode.MUST, queryBuilder);
+    }
+
+    public S and(boolean enable, QueryBuilder queryBuilder) {
+        return and(enable, FilterMode.MUST, queryBuilder);
+    }
+
+    public S and(FilterMode filterMode, QueryBuilder queryBuilder) {
+        return and(true, filterMode, queryBuilder);
+    }
+
+    public S and(boolean enable, FilterMode filterMode, QueryBuilder queryBuilder) {
+        if (!enable) {
+            return (S) this;
+        }
+        return andInternal(filterMode, queryBuilder);
+    }
+
+    public S or(QueryBuilder queryBuilder) {
+        return or(true, queryBuilder);
+    }
+
+    public S or(boolean enable, QueryBuilder queryBuilder) {
+        if (!enable) {
+            return (S) this;
+        }
+        this.booleanQueryBuilder.should(queryBuilder);
+        return (S) this;
+    }
+
+    /// region
+
     /// region internal
 
     private <R extends Comparable> S andInternal(
