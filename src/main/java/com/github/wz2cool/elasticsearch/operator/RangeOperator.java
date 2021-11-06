@@ -109,16 +109,16 @@ public class RangeOperator<R> implements IFilterOperator<R> {
         final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
         RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder(columnInfo.getColumnName());
         if (Objects.nonNull(gt)) {
-            rangeQueryBuilder.gt(gt);
+            rangeQueryBuilder.gt(getFilterValue(gt));
         }
         if (Objects.nonNull(gte)) {
-            rangeQueryBuilder.gte(gte);
+            rangeQueryBuilder.gte(getFilterValue(gte));
         }
         if (Objects.nonNull(lt)) {
-            rangeQueryBuilder.lt(lt);
+            rangeQueryBuilder.lt(getFilterValue(lt));
         }
         if (Objects.nonNull(lte)) {
-            rangeQueryBuilder.lte(lte);
+            rangeQueryBuilder.lte(getFilterValue(lte));
         }
         if (Objects.nonNull(timezone)) {
             rangeQueryBuilder.timeZone(timezone);
