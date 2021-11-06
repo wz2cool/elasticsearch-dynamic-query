@@ -1,5 +1,6 @@
 package com.github.wz2cool.elasticsearch.query;
 
+import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.operator.FilterOperators;
@@ -16,6 +17,7 @@ import java.util.function.UnaryOperator;
 public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     private final BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
+    private static final FilterOperators FILTER_OPERATORS = new FilterOperators();
 
     public S and(GetStringPropertyFunction<T> getPropertyFunc,
                  Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
@@ -37,7 +39,7 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
                  FilterMode filterMode,
                  GetStringPropertyFunction<T> getPropertyFunc,
                  Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
-        return null;
+        return andInternal(enable, filterMode, getPropertyFunc, operatorFunc);
     }
 
     public S and(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
@@ -86,6 +88,25 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         if (enable) {
             FilterGroup<T> filterGroup = new FilterGroup<>();
             booleanQueryBuilder.should(groupConsumer.apply(filterGroup).buildQuery());
+        }
+        return (S) this;
+    }
+
+    private <R> S andInternal(boolean enable,
+                              FilterMode filterMode,
+                              GetPropertyFunction<T, R> getPropertyFunc,
+                              Function<FilterOperators, IFilterOperator<R>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IFilterOperator<R> filterOperator = operatorFunc.apply(FILTER_OPERATORS);
+        final QueryBuilder queryBuilder = filterOperator.getQueryBuilder(getPropertyFunc);
+        if (filterMode == FilterMode.MUST) {
+            booleanQueryBuilder.must(queryBuilder);
+        } else if (filterMode == FilterMode.MUST_NOT) {
+            booleanQueryBuilder.mustNot(queryBuilder);
+        } else {
+            booleanQueryBuilder.filter(queryBuilder);
         }
         return (S) this;
     }

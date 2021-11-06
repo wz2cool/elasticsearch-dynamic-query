@@ -66,7 +66,7 @@ public class ExampleTest {
     @Test
     public void testTermInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
-                .and(TestExampleES::getP1, o -> o.term(""))
+                .and(TestExampleES::getP1, o -> o.terms("", "1"))
                 .and(g -> g
                         .and(TestExampleES::getP1Hit, o -> o.terms("2")))
                 .and("test", o -> o.multiMatch(TestExampleES::getP1, TestExampleES::getP1Hit));

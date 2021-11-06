@@ -1,28 +1,32 @@
 package com.github.wz2cool.elasticsearch.operator;
 
-import java.util.*;
+import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.TermsQueryBuilder;
 
-public class TermsOperator<T> implements IFilterOperator<T> {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-    private List<T> value;
+public class TermsOperator<R> implements IFilterOperator<R> {
 
-    public TermsOperator(T[] values) {
+    private List<R> values;
+
+    public TermsOperator(Collection<R> values) {
         if (Objects.isNull(values)) {
-            this.value = new ArrayList<>();
+            this.values = new ArrayList<>();
         } else {
-            this.value = Arrays.asList(values);
+            this.values = new ArrayList<>(values);
         }
     }
 
-    public TermsOperator(Collection<T> values) {
-        if (Objects.isNull(values)) {
-            this.value = new ArrayList<>();
-        } else {
-            this.value = new ArrayList<>(values);
-        }
-    }
-
-    public List<T> getValue() {
-        return this.value;
+    @Override
+    public <T> QueryBuilder getQueryBuilder(GetPropertyFunction<T, R> getPropertyFunc) {
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        return new TermsQueryBuilder(columnInfo.getColumnName(),
+                values.stream().map(this::getFilterValue).collect(Collectors.toList()));
     }
 }

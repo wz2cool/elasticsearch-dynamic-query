@@ -1,6 +1,11 @@
 package com.github.wz2cool.elasticsearch.operator;
 
-public class FuzzyOperator<T> implements IFilterOperator<T> {
+import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
+import org.elasticsearch.index.query.FuzzyQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+
+public class FuzzyOperator<R> implements IFilterOperator<R> {
 
     private final String value;
 
@@ -8,7 +13,9 @@ public class FuzzyOperator<T> implements IFilterOperator<T> {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
+    @Override
+    public <T> QueryBuilder getQueryBuilder(GetPropertyFunction<T, R> getPropertyFunc) {
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        return new FuzzyQueryBuilder(columnInfo.getColumnName(), value);
     }
 }
