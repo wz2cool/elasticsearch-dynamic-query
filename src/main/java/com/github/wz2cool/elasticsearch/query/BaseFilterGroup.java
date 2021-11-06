@@ -18,6 +18,7 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     private final BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
     private static final FilterOperators FILTER_OPERATORS = new FilterOperators();
+    private static final MultiMatchOperators MULTI_MATCH_OPERATORS = new MultiMatchOperators();
 
     public S and(GetStringPropertyFunction<T> getPropertyFunc,
                  Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
@@ -42,15 +43,8 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         return andInternal(enable, filterMode, getPropertyFunc, operatorFunc);
     }
 
-    public S and(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+    public S and(String value, Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
         return and(true, FilterMode.MUST, value, operatorFunc);
-    }
-
-    public S and(boolean enable,
-                 FilterMode filterMode,
-                 String value,
-                 Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
-        return null;
     }
 
     public S and(UnaryOperator<FilterGroup<T>> groupConsumer) {
@@ -63,6 +57,20 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
         return and(true, filterMode, groupConsumer);
+    }
+
+    public S and(boolean enable,
+                 FilterMode filterMode,
+                 String value,
+                 Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+
+        final MultiMatchOperator<T> operator = operatorFunc.apply(MULTI_MATCH_OPERATORS);
+
+
+        return null;
     }
 
     public S and(boolean enable, FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
@@ -100,7 +108,7 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
             return (S) this;
         }
         final IFilterOperator<R> filterOperator = operatorFunc.apply(FILTER_OPERATORS);
-        final QueryBuilder queryBuilder = filterOperator.getQueryBuilder(getPropertyFunc);
+        final QueryBuilder queryBuilder = filterOperator.buildQuery(getPropertyFunc);
         if (filterMode == FilterMode.MUST) {
             booleanQueryBuilder.must(queryBuilder);
         } else if (filterMode == FilterMode.MUST_NOT) {

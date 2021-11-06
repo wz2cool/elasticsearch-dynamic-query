@@ -1,5 +1,6 @@
 package com.github.wz2cool.elasticsearch.operator;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 public final class FilterOperators {
@@ -14,7 +15,7 @@ public final class FilterOperators {
 
     @SafeVarargs
     public final <T> TermsOperator<T> terms(T... values) {
-        return new TermsOperator<>(values);
+        return new TermsOperator<>(Arrays.asList(values));
     }
 
     public FuzzyOperator fuzzy(String value) {

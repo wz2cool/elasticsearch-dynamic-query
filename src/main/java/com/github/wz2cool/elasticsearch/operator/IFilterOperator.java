@@ -12,7 +12,7 @@ import java.util.Date;
 
 public interface IFilterOperator<R> {
 
-    <T> QueryBuilder getQueryBuilder(GetPropertyFunction<T, R> getPropertyFunc);
+    <T> QueryBuilder buildQuery(GetPropertyFunction<T, R> getPropertyFunc);
 
     default Object getFilterValue(Object value) {
         if (value instanceof Date) {

@@ -24,7 +24,7 @@ public class TermsOperator<R> implements IFilterOperator<R> {
     }
 
     @Override
-    public <T> QueryBuilder getQueryBuilder(GetPropertyFunction<T, R> getPropertyFunc) {
+    public <T> QueryBuilder buildQuery(GetPropertyFunction<T, R> getPropertyFunc) {
         final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
         return new TermsQueryBuilder(columnInfo.getColumnName(),
                 values.stream().map(this::getFilterValue).collect(Collectors.toList()));
