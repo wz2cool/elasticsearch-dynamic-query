@@ -23,7 +23,7 @@ public interface IFilterOperator<R> {
         return value;
     }
 
-    default <T> ColumnInfo getColumnInfo(GetPropertyFunction<T, R> getPropertyFunc) {
+    default <T, R> ColumnInfo getColumnInfo(GetPropertyFunction<T, R> getPropertyFunc) {
         final PropertyInfo propertyInfo = CommonsHelper.getPropertyInfo(getPropertyFunc);
         return EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
     }
