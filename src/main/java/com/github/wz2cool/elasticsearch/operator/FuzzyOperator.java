@@ -5,7 +5,7 @@ import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import org.elasticsearch.index.query.FuzzyQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
-public class FuzzyOperator<R> implements IFilterOperator<R> {
+public class FuzzyOperator implements IFilterOperator<String> {
 
     private final String value;
 
@@ -14,7 +14,7 @@ public class FuzzyOperator<R> implements IFilterOperator<R> {
     }
 
     @Override
-    public <T> QueryBuilder buildQuery(GetPropertyFunction<T, R> getPropertyFunc) {
+    public <T> QueryBuilder buildQuery(GetPropertyFunction<T, String> getPropertyFunc) {
         final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
         return new FuzzyQueryBuilder(columnInfo.getColumnName(), value);
     }

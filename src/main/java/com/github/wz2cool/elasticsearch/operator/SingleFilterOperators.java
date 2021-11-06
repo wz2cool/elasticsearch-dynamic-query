@@ -34,8 +34,28 @@ public final class SingleFilterOperators<R extends Comparable> {
         return new PrefixOperator(value);
     }
 
-    public RangeOperator<R> range() {
-        return new RangeOperator<>();
+    public RangeOperator<R> gt(R value) {
+        final RangeOperator<R> objectRangeOperator = new RangeOperator<>();
+        objectRangeOperator.gt(value);
+        return objectRangeOperator;
+    }
+
+    public RangeOperator<R> lt(R value) {
+        final RangeOperator<R> objectRangeOperator = new RangeOperator<>();
+        objectRangeOperator.lt(value);
+        return objectRangeOperator;
+    }
+
+    public RangeOperator<R> gte(R value) {
+        final RangeOperator<R> objectRangeOperator = new RangeOperator<>();
+        objectRangeOperator.gte(value);
+        return objectRangeOperator;
+    }
+
+    public RangeOperator<R> lte(R value) {
+        final RangeOperator<R> objectRangeOperator = new RangeOperator<>();
+        objectRangeOperator.lte(value);
+        return objectRangeOperator;
     }
 
     public WildcardOperator wildcard(String query) {

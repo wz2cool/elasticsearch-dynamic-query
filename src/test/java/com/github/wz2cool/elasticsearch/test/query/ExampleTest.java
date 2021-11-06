@@ -63,15 +63,23 @@ public class ExampleTest {
         testExampleEsDAO.save(data);
     }
 
-
     @Test
     public void testTermInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
-                .and(TestExampleES::getId, o -> o.range().gt(3L));
+                .and(TestExampleES::getId, o -> o.term(3L))
+                .orderBy(TestExampleES::getId, SortOrder.ASC);
         final QueryBuilder queryBuilder = query.buildQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
     }
 
+    @Test
+    public void testRangeInteger() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(TestExampleES::getId, o -> o.gt(1L).lt(3L));
+        final QueryBuilder queryBuilder = query.buildQuery();
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(Integer.valueOf(2), testExampleES.get(0).getP2());
+    }
 
 }
