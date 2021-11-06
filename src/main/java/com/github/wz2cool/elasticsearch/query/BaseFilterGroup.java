@@ -804,6 +804,170 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     /// endregion
 
+    /// region array
+
+    /// region string
+
+    public S or(
+            GetStringArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetStringArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, STRING_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region integer
+
+    public S or(
+            GetIntegerArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetIntegerArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, INTEGER_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region boolean
+
+    public S or(
+            GetBooleanArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetBooleanArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, BOOLEAN_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region byte
+
+    public S or(
+            GetByteArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetByteArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, BYTE_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region BigDecimal
+
+    public S or(
+            GetBigDecimalArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetBigDecimalArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, BIG_DECIMAL_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region date
+
+    public S or(
+            GetDateArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetDateArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, DATE_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region double
+
+    public S or(
+            GetDoubleArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetDoubleArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, DOUBLE_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region float
+
+    public S or(
+            GetFloatArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetFloatArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, FLOAT_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region long
+
+    public S or(
+            GetLongArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetLongArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, LONG_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region short
+
+    public S or(
+            GetShortArrayPropertyFunction<T> getPropertyFunc,
+            Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetShortArrayPropertyFunction<T> getPropertyFunc,
+                Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, SHORT_ARRAY_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// endregion
+
     /// endregion
 
 
