@@ -1,8 +1,11 @@
 package com.github.wz2cool.elasticsearch.query;
 
+import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
-import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilder;
-import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilders;
+import com.github.wz2cool.elasticsearch.operator.FilterOperators;
+import com.github.wz2cool.elasticsearch.operator.IFilterOperator;
+import com.github.wz2cool.elasticsearch.operator.MultiMatchOperator;
+import com.github.wz2cool.elasticsearch.operator.MultiMatchOperators;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
@@ -13,63 +16,73 @@ import java.util.function.UnaryOperator;
 public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     private final BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
-    private final ExtQueryBuilders<T> extQueryBuilders = new ExtQueryBuilders<>();
 
-    public S and(Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
-        return and(true, filter);
+    public S and(GetStringPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
     }
 
-    public S and(boolean enable, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
-        return and(enable, FilterMode.MUST, filter);
+    public S and(boolean enable, GetStringPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
     }
 
-    public S and(FilterMode filterMode, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
-        return and(true, filterMode, filter);
+    public S and(FilterMode filterMode,
+                 GetStringPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+        return and(true, filterMode, getPropertyFunc, operatorFunc);
     }
 
-    public S and(boolean enable, FilterMode filterMode, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
+    public S and(boolean enable,
+                 FilterMode filterMode,
+                 GetStringPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+        return null;
+    }
+
+    public S and(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        return and(true, FilterMode.MUST, value, operatorFunc);
+    }
+
+    public S and(boolean enable,
+                 FilterMode filterMode,
+                 String value,
+                 Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        return null;
+    }
+
+    public S and(UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return and(true, FilterMode.MUST, groupConsumer);
+    }
+
+    public S and(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return and(enable, FilterMode.MUST, groupConsumer);
+    }
+
+    public S and(FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return and(true, filterMode, groupConsumer);
+    }
+
+    public S and(boolean enable, FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
         if (enable) {
-            final ExtQueryBuilder extQueryBuilder = filter.apply(extQueryBuilders);
+            FilterGroup<T> filterGroup = new FilterGroup<>();
+            final QueryBuilder queryBuilder = groupConsumer.apply(filterGroup).buildQuery();
             if (filterMode == FilterMode.MUST) {
-                booleanQueryBuilder.must(extQueryBuilder.build());
+                booleanQueryBuilder.must(queryBuilder);
             } else if (filterMode == FilterMode.MUST_NOT) {
-                booleanQueryBuilder.mustNot(extQueryBuilder.build());
+                booleanQueryBuilder.mustNot(queryBuilder);
             } else {
-                booleanQueryBuilder.filter(extQueryBuilder.build());
+                booleanQueryBuilder.filter(queryBuilder);
             }
         }
         return (S) this;
     }
 
-    public S or(Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
-        return or(true, filter);
+    public S or(UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return or(true, groupConsumer);
     }
 
-    public S or(boolean enable, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
-        if (enable) {
-            final ExtQueryBuilder extQueryBuilder = filter.apply(extQueryBuilders);
-            booleanQueryBuilder.should(extQueryBuilder.build());
-        }
-        return (S) this;
-    }
-
-    public S andGroup(UnaryOperator<FilterGroup<T>> groupConsumer) {
-        return andGroup(true, groupConsumer);
-    }
-
-    public S andGroup(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
-        if (enable) {
-            FilterGroup<T> filterGroup = new FilterGroup<>();
-            booleanQueryBuilder.must(groupConsumer.apply(filterGroup).buildQuery());
-        }
-        return (S) this;
-    }
-
-    public S orGroup(UnaryOperator<FilterGroup<T>> groupConsumer) {
-        return orGroup(true, groupConsumer);
-    }
-
-    public S orGroup(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
+    public S or(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
         if (enable) {
             FilterGroup<T> filterGroup = new FilterGroup<>();
             booleanQueryBuilder.should(groupConsumer.apply(filterGroup).buildQuery());
