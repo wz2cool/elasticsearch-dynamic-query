@@ -12,6 +12,11 @@ public final class FilterOperators {
         return new TermsOperator<>(values);
     }
 
+    @SafeVarargs
+    public final <T> TermsOperator<T> terms(T... values) {
+        return new TermsOperator<>(values);
+    }
+
     public FuzzyOperator fuzzy(String value) {
         return new FuzzyOperator(value);
     }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.wz2cool.elasticsearch.exception.JsonRuntimeException;
+import com.github.wz2cool.exception.JsonRuntimeException;
 
 import java.nio.charset.Charset;
 import java.util.List;
