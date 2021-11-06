@@ -38,6 +38,8 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     private static final ArrayFilterOperators<Long> LONG_ARRAY_FILTER_OPERATORS = new ArrayFilterOperators<>();
     private static final ArrayFilterOperators<Short> SHORT_ARRAY_FILTER_OPERATORS = new ArrayFilterOperators<>();
 
+    /// region and
+
     /// region single
 
     /// region string
@@ -78,15 +80,6 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         }
         final MultiMatchOperator<T> operator = operatorFunc.apply(MULTI_MATCH_OPERATORS);
         final QueryBuilder queryBuilder = operator.buildQuery(value);
-        return andInternal(filterMode, queryBuilder);
-    }
-
-    public S and(boolean enable, FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
-        if (!enable) {
-            return (S) this;
-        }
-        FilterGroup<T> filterGroup = new FilterGroup<>();
-        final QueryBuilder queryBuilder = groupConsumer.apply(filterGroup).buildQuery();
         return andInternal(filterMode, queryBuilder);
     }
 
@@ -629,6 +622,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     /// endregion
 
+    /// endregion
+
+    /// region or
+
+    /// endregion
+
+
     /// region group
 
     public S and(UnaryOperator<FilterGroup<T>> groupConsumer) {
@@ -641,6 +641,15 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
         return and(true, filterMode, groupConsumer);
+    }
+
+    public S and(boolean enable, FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
+        if (!enable) {
+            return (S) this;
+        }
+        FilterGroup<T> filterGroup = new FilterGroup<>();
+        final QueryBuilder queryBuilder = groupConsumer.apply(filterGroup).buildQuery();
+        return andInternal(filterMode, queryBuilder);
     }
 
     public S or(UnaryOperator<FilterGroup<T>> groupConsumer) {
@@ -697,6 +706,34 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         } else {
             booleanQueryBuilder.filter(queryBuilder);
         }
+        return (S) this;
+    }
+
+    private <R extends Comparable> S orInternal(
+            boolean enable,
+            GetPropertyFunction<T, R> getPropertyFunc,
+            SingleFilterOperators<R> singleFilterOperators,
+            Function<SingleFilterOperators<R>, IFilterOperator<R>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IFilterOperator<R> filterOperator = operatorFunc.apply(singleFilterOperators);
+        final QueryBuilder queryBuilder = filterOperator.buildQuery(getPropertyFunc);
+        booleanQueryBuilder.should(queryBuilder);
+        return (S) this;
+    }
+
+    private <R extends Comparable> S orInternal(
+            boolean enable,
+            GetArrayPropertyFunction<T, R> getPropertyFunc,
+            ArrayFilterOperators<R> arrayFilterOperators,
+            Function<ArrayFilterOperators<R>, IArrayFilterOperator<R>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IArrayFilterOperator<R> apply = operatorFunc.apply(arrayFilterOperators);
+        final QueryBuilder queryBuilder = apply.buildQuery(getPropertyFunc);
+        booleanQueryBuilder.should(queryBuilder);
         return (S) this;
     }
 
