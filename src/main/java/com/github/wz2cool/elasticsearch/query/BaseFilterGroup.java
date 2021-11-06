@@ -15,7 +15,7 @@ import java.util.function.UnaryOperator;
 public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     private final BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
-    private static final MultiMatchOperators MULTI_MATCH_OPERATORS = new MultiMatchOperators();
+    private final MultiMatchOperators<T> multiMatchOperators = new MultiMatchOperators<>();
     private static final SingleFilterOperators<String> STRING_FILTER_OPERATORS = new SingleFilterOperators<>();
     private static final SingleFilterOperators<Integer> INTEGER_FILTER_OPERATORS = new SingleFilterOperators<>();
     private static final SingleFilterOperators<BigDecimal> BIG_DECIMAL_FILTER_OPERATORS = new SingleFilterOperators<>();
@@ -67,18 +67,18 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         return andInternal(enable, filterMode, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(String value, Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
+    public S and(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
         return and(true, FilterMode.MUST, value, operatorFunc);
     }
 
     public S and(boolean enable,
                  FilterMode filterMode,
                  String value,
-                 Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
+                 Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
         if (!enable) {
             return (S) this;
         }
-        final MultiMatchOperator<T> operator = operatorFunc.apply(MULTI_MATCH_OPERATORS);
+        final MultiMatchOperator<T> operator = operatorFunc.apply(multiMatchOperators);
         final QueryBuilder queryBuilder = operator.buildQuery(value);
         return andInternal(filterMode, queryBuilder);
     }
@@ -641,17 +641,17 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         return orInternal(enable, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S or(String value, Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
+    public S or(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
         return or(true, value, operatorFunc);
     }
 
     public S or(boolean enable,
                 String value,
-                Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
+                Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
         if (!enable) {
             return (S) this;
         }
-        final MultiMatchOperator<T> operator = operatorFunc.apply(MULTI_MATCH_OPERATORS);
+        final MultiMatchOperator<T> operator = operatorFunc.apply(multiMatchOperators);
         final QueryBuilder queryBuilder = operator.buildQuery(value);
         this.booleanQueryBuilder.should(queryBuilder);
         return (S) this;

@@ -2,10 +2,10 @@ package com.github.wz2cool.elasticsearch.operator;
 
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
 
-public class MultiMatchOperators {
+public class MultiMatchOperators<T> {
 
     @SafeVarargs
-    public final <T> MultiMatchOperator<T> multiMatch(GetStringPropertyFunction<T>... getPropertyFuncs) {
+    public final MultiMatchOperator<T> multiMatch(GetStringPropertyFunction<T>... getPropertyFuncs) {
         return new MultiMatchOperator<>(getPropertyFuncs);
     }
 }

@@ -8,6 +8,7 @@ import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
 import org.apache.commons.lang3.ArrayUtils;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
@@ -74,6 +75,31 @@ public class ExampleTest {
     }
 
     @Test
+    public void testArrayTermInteger() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(TestExampleES::getP9, o -> o.term(8))
+                .orderBy(TestExampleES::getId, SortOrder.ASC);
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertTrue(testExampleES.size() > 0);
+        for (TestExampleES testExample : testExampleES) {
+            final int i = ArrayUtils.indexOf(testExample.getP9(), 8);
+            assertTrue(i >= 0);
+        }
+    }
+
+    @Test
+    public void testTermsInteger() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(FilterMode.FILTER, TestExampleES::getId, o -> o.terms(3L, 6L, 9L))
+                .orderBy(TestExampleES::getId, SortOrder.ASC);
+        final QueryBuilder queryBuilder = query.buildQuery();
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
+        assertEquals(Integer.valueOf(6), testExampleES.get(1).getP2());
+        assertEquals(Integer.valueOf(9), testExampleES.get(2).getP2());
+    }
+
+    @Test
     public void testRangeInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(TestExampleES::getId, o -> o.gt(1L).lt(3L));
@@ -93,4 +119,26 @@ public class ExampleTest {
         assertEquals(Integer.valueOf(2), testExampleES.get(0).getP2());
     }
 
+    @Test
+    public void testMultiMatch() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and("jcommuzzo5", o -> o
+                        .multiMatch(TestExampleES::getP1, TestExampleES::getP7)
+                        .type(MultiMatchQueryBuilder.Type.MOST_FIELDS));
+        final QueryBuilder queryBuilder = query.buildQuery();
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(Integer.valueOf(6), testExampleES.get(0).getP2());
+    }
+
+    @Test
+    public void testOr() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .or(TestExampleES::getId, o -> o.term(1L))
+                .or(TestExampleES::getId, o -> o.term(3L))
+                .orderBy(TestExampleES::getId, SortOrder.DESC);
+        final QueryBuilder queryBuilder = query.buildQuery();
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
+        assertEquals(Integer.valueOf(1), testExampleES.get(1).getP2());
+    }
 }

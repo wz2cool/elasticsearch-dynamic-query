@@ -28,6 +28,7 @@ public class MultiMatchOperator<T> {
     private Boolean lenient;
     private Float cutoffFrequency;
     private Boolean fuzzyTranspositions;
+    private MultiMatchQueryBuilder.Type type;
 
 
     public MultiMatchOperator(GetStringPropertyFunction<T>[] getPropertyFuncs) {
@@ -134,6 +135,11 @@ public class MultiMatchOperator<T> {
         return this;
     }
 
+    public MultiMatchOperator<T> type(MultiMatchQueryBuilder.Type type) {
+        this.type = type;
+        return this;
+    }
+
     public QueryBuilder buildQuery(String value) {
         final MultiMatchQueryBuilder multiMatchQueryBuilder = new MultiMatchQueryBuilder(value);
         for (Map.Entry<String, Float> entry : fieldMap.entrySet()) {
@@ -168,6 +174,9 @@ public class MultiMatchOperator<T> {
         }
         if (Objects.nonNull(fuzzyTranspositions)) {
             multiMatchQueryBuilder.fuzzyTranspositions(fuzzyTranspositions);
+        }
+        if (Objects.nonNull(type)) {
+            multiMatchQueryBuilder.type(type);
         }
         return multiMatchQueryBuilder;
     }
