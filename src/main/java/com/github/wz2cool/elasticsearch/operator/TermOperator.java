@@ -9,7 +9,7 @@ public class TermOperator<R> implements IFilterOperator<R> {
 
     private final R value;
 
-    public TermOperator(R value) {
+    TermOperator(R value) {
         this.value = value;
     }
 

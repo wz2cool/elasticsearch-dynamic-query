@@ -15,7 +15,7 @@ public class TermsOperator<R> implements IFilterOperator<R> {
 
     private List<R> values;
 
-    public TermsOperator(Collection<R> values) {
+    TermsOperator(Collection<R> values) {
         if (Objects.isNull(values)) {
             this.values = new ArrayList<>();
         } else {

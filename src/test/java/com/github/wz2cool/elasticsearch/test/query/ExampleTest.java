@@ -69,7 +69,9 @@ public class ExampleTest {
                 .and(TestExampleES::getP1, o -> o.terms("", "1"))
                 .and(g -> g
                         .and(TestExampleES::getP1Hit, o -> o.terms("2")))
-                .and("test", o -> o.multiMatch(TestExampleES::getP1, TestExampleES::getP1Hit));
+                .and("test", o -> o
+                        .multiMatch(TestExampleES::getP1, TestExampleES::getP1Hit)
+                        .minimumShouldMatch("100%"));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
     }

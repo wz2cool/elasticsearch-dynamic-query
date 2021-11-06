@@ -66,26 +66,18 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         if (!enable) {
             return (S) this;
         }
-
         final MultiMatchOperator<T> operator = operatorFunc.apply(MULTI_MATCH_OPERATORS);
-
-
-        return null;
+        final QueryBuilder queryBuilder = operator.buildQuery(value);
+        return andInternal(filterMode, queryBuilder);
     }
 
     public S and(boolean enable, FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
-        if (enable) {
-            FilterGroup<T> filterGroup = new FilterGroup<>();
-            final QueryBuilder queryBuilder = groupConsumer.apply(filterGroup).buildQuery();
-            if (filterMode == FilterMode.MUST) {
-                booleanQueryBuilder.must(queryBuilder);
-            } else if (filterMode == FilterMode.MUST_NOT) {
-                booleanQueryBuilder.mustNot(queryBuilder);
-            } else {
-                booleanQueryBuilder.filter(queryBuilder);
-            }
+        if (!enable) {
+            return (S) this;
         }
-        return (S) this;
+        FilterGroup<T> filterGroup = new FilterGroup<>();
+        final QueryBuilder queryBuilder = groupConsumer.apply(filterGroup).buildQuery();
+        return andInternal(filterMode, queryBuilder);
     }
 
     public S or(UnaryOperator<FilterGroup<T>> groupConsumer) {
@@ -109,6 +101,12 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         }
         final IFilterOperator<R> filterOperator = operatorFunc.apply(FILTER_OPERATORS);
         final QueryBuilder queryBuilder = filterOperator.buildQuery(getPropertyFunc);
+        return andInternal(filterMode, queryBuilder);
+    }
+
+    private S andInternal(
+            FilterMode filterMode,
+            QueryBuilder queryBuilder) {
         if (filterMode == FilterMode.MUST) {
             booleanQueryBuilder.must(queryBuilder);
         } else if (filterMode == FilterMode.MUST_NOT) {

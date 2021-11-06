@@ -9,7 +9,7 @@ public class FuzzyOperator<R> implements IFilterOperator<R> {
 
     private final String value;
 
-    public FuzzyOperator(String value) {
+    FuzzyOperator(String value) {
         this.value = value;
     }
 
