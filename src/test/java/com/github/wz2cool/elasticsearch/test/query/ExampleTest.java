@@ -67,11 +67,14 @@ public class ExampleTest {
     public void testTermInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(TestExampleES::getP1, o -> o.terms("", "1"))
-                .and(TestExampleES::getP2, o-> o.range().gt(1))
+                .and(g -> g
+                        .and(TestExampleES::getP1, o -> o.term("1")))
+                .and(TestExampleES::getP2, o -> o.range().gt(1).lt(2))
                 .and(g -> g
                         .and(TestExampleES::getP1Hit, o -> o.terms("2")))
                 .and("test", o -> o
                         .multiMatch(TestExampleES::getP1, TestExampleES::getP1Hit)
+                        .field(TestExampleES::getP1, 1.f)
                         .minimumShouldMatch("100%"));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
