@@ -82,4 +82,15 @@ public class ExampleTest {
         assertEquals(Integer.valueOf(2), testExampleES.get(0).getP2());
     }
 
+    @Test
+    public void testGroup() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(FilterMode.FILTER, g -> g
+                        .and(FilterMode.FILTER, TestExampleES::getId, o -> o.gt(1L))
+                        .and(FilterMode.FILTER, TestExampleES::getId, o -> o.lt(3L)));
+        final QueryBuilder queryBuilder = query.buildQuery();
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(Integer.valueOf(2), testExampleES.get(0).getP2());
+    }
+
 }
