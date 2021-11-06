@@ -16,6 +16,6 @@ public class TermOperator<R> implements IFilterOperator<R> {
     @Override
     public <T> QueryBuilder buildQuery(GetPropertyFunction<T, R> getPropertyFunc) {
         final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
-        return new TermQueryBuilder(columnInfo.getColumnName(), value);
+        return new TermQueryBuilder(columnInfo.getColumnName(), getFilterValue(value));
     }
 }

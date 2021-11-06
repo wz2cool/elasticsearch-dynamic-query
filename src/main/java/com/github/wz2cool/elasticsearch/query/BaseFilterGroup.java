@@ -1,5 +1,6 @@
 package com.github.wz2cool.elasticsearch.query;
 
+import com.github.wz2cool.elasticsearch.lambda.GetIntegerPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
@@ -17,29 +18,52 @@ import java.util.function.UnaryOperator;
 public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     private final BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
-    private static final FilterOperators FILTER_OPERATORS = new FilterOperators();
     private static final MultiMatchOperators MULTI_MATCH_OPERATORS = new MultiMatchOperators();
 
     public S and(GetStringPropertyFunction<T> getPropertyFunc,
-                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+                 Function<FilterOperators<String>, IFilterOperator<String>> operatorFunc) {
         return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable, GetStringPropertyFunction<T> getPropertyFunc,
-                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+                 Function<FilterOperators<String>, IFilterOperator<String>> operatorFunc) {
         return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
                  GetStringPropertyFunction<T> getPropertyFunc,
-                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+                 Function<FilterOperators<String>, IFilterOperator<String>> operatorFunc) {
         return and(true, filterMode, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  FilterMode filterMode,
                  GetStringPropertyFunction<T> getPropertyFunc,
-                 Function<FilterOperators, IFilterOperator<String>> operatorFunc) {
+                 Function<FilterOperators<String>, IFilterOperator<String>> operatorFunc) {
+        return andInternal(enable, filterMode, getPropertyFunc, operatorFunc);
+    }
+
+    public S and(GetIntegerPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+    }
+
+    public S and(boolean enable,
+                 GetIntegerPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+    }
+
+    public S and(FilterMode filterMode,
+                 GetIntegerPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return and(true, filterMode, getPropertyFunc, operatorFunc);
+    }
+
+    public S and(boolean enable,
+                 FilterMode filterMode,
+                 GetIntegerPropertyFunction<T> getPropertyFunc,
+                 Function<FilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
         return andInternal(enable, filterMode, getPropertyFunc, operatorFunc);
     }
 
@@ -95,11 +119,12 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     private <R> S andInternal(boolean enable,
                               FilterMode filterMode,
                               GetPropertyFunction<T, R> getPropertyFunc,
-                              Function<FilterOperators, IFilterOperator<R>> operatorFunc) {
+                              Function<FilterOperators<R>, IFilterOperator<R>> operatorFunc) {
         if (!enable) {
             return (S) this;
         }
-        final IFilterOperator<R> filterOperator = operatorFunc.apply(FILTER_OPERATORS);
+        final FilterOperators<R> objectFilterOperators = new FilterOperators<>();
+        final IFilterOperator<R> filterOperator = operatorFunc.apply(objectFilterOperators);
         final QueryBuilder queryBuilder = filterOperator.buildQuery(getPropertyFunc);
         return andInternal(filterMode, queryBuilder);
     }

@@ -3,22 +3,38 @@ package com.github.wz2cool.elasticsearch.operator;
 import java.util.Arrays;
 import java.util.Collection;
 
-public final class FilterOperators {
+public final class FilterOperators<R> {
 
-    public <T> TermOperator<T> term(T value) {
+    public TermOperator<R> term(R value) {
         return new TermOperator<>(value);
     }
 
-    public <T> TermsOperator<T> terms(Collection<T> values) {
+    public TermsOperator<R> terms(Collection<R> values) {
         return new TermsOperator<>(values);
     }
 
     @SafeVarargs
-    public final <T> TermsOperator<T> terms(T... values) {
+    public final TermsOperator<R> terms(R... values) {
         return new TermsOperator<>(Arrays.asList(values));
     }
 
     public FuzzyOperator fuzzy(String value) {
         return new FuzzyOperator(value);
+    }
+
+    public MatchOperator match(String value) {
+        return new MatchOperator(value);
+    }
+
+    public MatchPhraseOperator matchPhrase(String value) {
+        return new MatchPhraseOperator(value);
+    }
+
+    public PrefixOperator prefix(String value) {
+        return new PrefixOperator(value);
+    }
+
+    public RangeOperator<R> range() {
+        return new RangeOperator<>();
     }
 }
