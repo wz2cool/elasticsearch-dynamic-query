@@ -15,7 +15,6 @@ import java.util.function.UnaryOperator;
 public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     private final BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
-    private final MultiMatchOperators<T> multiMatchOperators = new MultiMatchOperators<>();
     private static final SingleFilterOperators<String> STRING_FILTER_OPERATORS = new SingleFilterOperators<>();
     private static final SingleFilterOperators<Integer> INTEGER_FILTER_OPERATORS = new SingleFilterOperators<>();
     private static final SingleFilterOperators<BigDecimal> BIG_DECIMAL_FILTER_OPERATORS = new SingleFilterOperators<>();
@@ -78,7 +77,7 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         if (!enable) {
             return (S) this;
         }
-        final MultiMatchOperator<T> operator = operatorFunc.apply(multiMatchOperators);
+        final MultiMatchOperator<T> operator = operatorFunc.apply(new MultiMatchOperators<>());
         final QueryBuilder queryBuilder = operator.buildQuery(value);
         return andInternal(filterMode, queryBuilder);
     }
@@ -651,7 +650,7 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         if (!enable) {
             return (S) this;
         }
-        final MultiMatchOperator<T> operator = operatorFunc.apply(multiMatchOperators);
+        final MultiMatchOperator<T> operator = operatorFunc.apply(new MultiMatchOperators<>());
         final QueryBuilder queryBuilder = operator.buildQuery(value);
         this.booleanQueryBuilder.should(queryBuilder);
         return (S) this;

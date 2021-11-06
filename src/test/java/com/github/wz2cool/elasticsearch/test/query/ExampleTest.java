@@ -1,8 +1,6 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
-import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
-import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
@@ -24,7 +22,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
