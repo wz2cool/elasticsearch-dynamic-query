@@ -626,6 +626,184 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     /// region or
 
+    /// region single
+
+    /// region string
+
+    public S or(GetStringPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetStringPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
+    }
+
+    public S or(String value, Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
+        return or(true, value, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                String value,
+                Function<MultiMatchOperators, MultiMatchOperator<T>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final MultiMatchOperator<T> operator = operatorFunc.apply(MULTI_MATCH_OPERATORS);
+        final QueryBuilder queryBuilder = operator.buildQuery(value);
+        this.booleanQueryBuilder.should(queryBuilder);
+        return (S) this;
+    }
+
+    /// endregion
+
+    /// region integer
+
+    public S or(GetIntegerPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetIntegerPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, INTEGER_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region BigDecimal
+
+    public S or(
+            GetBigDecimalPropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetBigDecimalPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, BIG_DECIMAL_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region Boolean
+
+    public S or(
+            GetBooleanPropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetBooleanPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, BOOLEAN_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region Byte
+
+    public S or(
+            GetBytePropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetBytePropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, BYTE_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region date
+
+    public S or(
+            GetDatePropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetDatePropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, DATE_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region double
+
+    public S or(
+            GetDoublePropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetDoublePropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, DOUBLE_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region float
+
+    public S or(
+            GetFloatPropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetFloatPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, FLOAT_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region long
+
+    public S or(
+            GetLongPropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetLongPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, LONG_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// region short
+
+    public S or(
+            GetShortPropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
+        return or(true, getPropertyFunc, operatorFunc);
+    }
+
+    public S or(boolean enable,
+                GetShortPropertyFunction<T> getPropertyFunc,
+                Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
+        return orInternal(enable, getPropertyFunc, SHORT_FILTER_OPERATORS, operatorFunc);
+    }
+
+    /// endregion
+
+    /// endregion
+
     /// endregion
 
 
