@@ -9,7 +9,6 @@ import static org.springframework.data.querydsl.QuerydslUtils.QUERY_DSL_PRESENT;
 
 /**
  * @author Frank
- * @date 2021/11/07
  **/
 public class ElasticsearchExtRepositoryFactory extends ElasticsearchRepositoryFactory {
 

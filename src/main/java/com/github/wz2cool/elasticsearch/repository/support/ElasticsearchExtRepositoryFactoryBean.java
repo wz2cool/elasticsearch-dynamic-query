@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 /**
  * @author Frank
- * @date 2021/11/07
  **/
 public class ElasticsearchExtRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
         extends ElasticsearchRepositoryFactoryBean<T, S, ID> {

@@ -26,7 +26,6 @@ import java.util.*;
 
 /**
  * @author Frank
- * @date 2021/11/07
  **/
 public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchRepository<T, I> implements ElasticsearchExtRepository<T, I> {
 
