@@ -12,16 +12,11 @@ import org.springframework.data.elasticsearch.core.query.DeleteQuery;
  **/
 public interface DeleteByDynamicQueryMapper<T> {
 
+
     /**
      * delete by dynamic query
      *
-     * @param elasticsearchOperations elasticsearch operations
-     * @param dynamicQuery            dynamic query
+     * @param dynamicQuery dynamic query
      */
-    default void deleteByDynamicQuery(ElasticsearchOperations elasticsearchOperations, DynamicQuery<T> dynamicQuery) {
-        final QueryBuilder queryBuilder = dynamicQuery.buildQuery();
-        DeleteQuery deleteQuery = new DeleteQuery();
-        deleteQuery.setQuery(queryBuilder);
-        elasticsearchOperations.delete(deleteQuery, dynamicQuery.getClazz());
-    }
+    void deleteByDynamicQuery(DynamicQuery<T> dynamicQuery);
 }
