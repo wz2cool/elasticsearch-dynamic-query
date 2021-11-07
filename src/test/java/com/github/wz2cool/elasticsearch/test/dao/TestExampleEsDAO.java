@@ -14,11 +14,9 @@ public class TestExampleEsDAO {
 
     @Resource
     private TestExampleEsMapper testExampleEsMapper;
-    @Resource
-    private ElasticsearchTemplate elasticsearchTemplate;
 
     public List<TestExampleES> selectByDynamicQuery(DynamicQuery<TestExampleES> query) {
-        return testExampleEsMapper.selectByDynamicQuery(elasticsearchTemplate, query);
+        return testExampleEsMapper.selectByDynamicQuery(query);
     }
 
     public void save(List<TestExampleES> testExampleESList) {

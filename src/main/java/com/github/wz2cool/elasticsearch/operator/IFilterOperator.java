@@ -4,6 +4,7 @@ import com.github.wz2cool.elasticsearch.cache.EntityCache;
 import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.ColumnInfo;
+import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.model.PropertyInfo;
 import org.elasticsearch.index.query.QueryBuilder;
 
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public interface IFilterOperator<R> {
+
+    FilterMode getDefaultFilterMode();
 
     <T> QueryBuilder buildQuery(GetPropertyFunction<T, R> getPropertyFunc);
 

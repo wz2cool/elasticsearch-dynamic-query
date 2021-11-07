@@ -8,6 +8,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -45,12 +46,12 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetStringPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable, GetStringPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -67,7 +68,7 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     }
 
     public S and(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
-        return and(true, FilterMode.MUST, value, operatorFunc);
+        return and(true, null, value, operatorFunc);
     }
 
     public S and(boolean enable,
@@ -79,7 +80,8 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         }
         final MultiMatchOperator<T> operator = operatorFunc.apply(new MultiMatchOperators<>());
         final QueryBuilder queryBuilder = operator.buildQuery(value);
-        return andInternal(filterMode, queryBuilder);
+        FilterMode useFilterMode = Objects.isNull(filterMode) ? operator.getDefaultFilterMode() : filterMode;
+        return andInternal(useFilterMode, queryBuilder);
     }
 
     /// endregion
@@ -88,13 +90,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetIntegerPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetIntegerPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -116,13 +118,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetBigDecimalPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBigDecimalPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -144,13 +146,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetBooleanPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBooleanPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -172,13 +174,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetBytePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBytePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -200,13 +202,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetDatePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetDatePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -228,13 +230,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetDoublePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetDoublePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -256,13 +258,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetFloatPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetFloatPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -284,13 +286,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetLongPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetLongPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -312,13 +314,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetShortPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetShortPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -344,12 +346,12 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetStringArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable, GetStringArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -371,13 +373,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetIntegerArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetIntegerArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -399,13 +401,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetBooleanArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBooleanArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -427,13 +429,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetByteArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetByteArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -455,13 +457,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetBigDecimalArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBigDecimalArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -483,13 +485,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetDateArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetDateArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -511,13 +513,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetDoubleArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetDoubleArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -539,13 +541,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetFloatArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetFloatArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -567,13 +569,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetLongArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetLongArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -595,13 +597,13 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     public S and(GetShortArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
-        return and(true, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(true, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetShortArrayPropertyFunction<T> getPropertyFunc,
                  Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
-        return and(enable, FilterMode.MUST, getPropertyFunc, operatorFunc);
+        return and(enable, null, getPropertyFunc, operatorFunc);
     }
 
     public S and(FilterMode filterMode,
@@ -973,11 +975,11 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     /// region group
 
     public S and(UnaryOperator<FilterGroup<T>> groupConsumer) {
-        return and(true, FilterMode.MUST, groupConsumer);
+        return and(true, null, groupConsumer);
     }
 
     public S and(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
-        return and(enable, FilterMode.MUST, groupConsumer);
+        return and(enable, null, groupConsumer);
     }
 
     public S and(FilterMode filterMode, UnaryOperator<FilterGroup<T>> groupConsumer) {
@@ -1010,11 +1012,11 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     /// region custom
 
     public S and(QueryBuilder queryBuilder) {
-        return and(true, FilterMode.MUST, queryBuilder);
+        return and(true, null, queryBuilder);
     }
 
     public S and(boolean enable, QueryBuilder queryBuilder) {
-        return and(enable, FilterMode.MUST, queryBuilder);
+        return and(enable, null, queryBuilder);
     }
 
     public S and(FilterMode filterMode, QueryBuilder queryBuilder) {
@@ -1055,7 +1057,8 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         }
         final IFilterOperator<R> filterOperator = operatorFunc.apply(singleFilterOperators);
         final QueryBuilder queryBuilder = filterOperator.buildQuery(getPropertyFunc);
-        return andInternal(filterMode, queryBuilder);
+        FilterMode useFilterMode = Objects.isNull(filterMode) ? filterOperator.getDefaultFilterMode() : filterMode;
+        return andInternal(useFilterMode, queryBuilder);
     }
 
     private <R extends Comparable> S andInternal(
@@ -1069,7 +1072,8 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         }
         final IArrayFilterOperator<R> apply = operatorFunc.apply(arrayFilterOperators);
         final QueryBuilder queryBuilder = apply.buildQuery(getPropertyFunc);
-        return andInternal(filterMode, queryBuilder);
+        FilterMode useFilterMode = Objects.isNull(filterMode) ? apply.getDefaultFilterMode() : filterMode;
+        return andInternal(useFilterMode, queryBuilder);
     }
 
     private S andInternal(

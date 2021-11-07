@@ -5,6 +5,7 @@ import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.ColumnInfo;
+import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.model.PropertyInfo;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -30,6 +31,9 @@ public class MultiMatchOperator<T> {
     private Boolean fuzzyTranspositions;
     private MultiMatchQueryBuilder.Type type;
 
+    public FilterMode getDefaultFilterMode() {
+        return FilterMode.MUST;
+    }
 
     public MultiMatchOperator(GetStringPropertyFunction<T>[] getPropertyFuncs) {
         for (GetStringPropertyFunction<T> getPropertyFunc : getPropertyFuncs) {

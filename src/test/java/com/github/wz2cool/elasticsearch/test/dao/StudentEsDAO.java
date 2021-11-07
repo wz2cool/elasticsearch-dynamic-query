@@ -39,14 +39,14 @@ public class StudentEsDAO {
     }
 
     public LogicPagingResult<StudentES> selectByLogicPaging(LogicPagingQuery<StudentES> logicPagingQuery) {
-        return studentEsMapper.selectByLogicPaging(elasticsearchTemplate, logicPagingQuery);
+        return studentEsMapper.selectByLogicPaging(logicPagingQuery);
     }
 
     public List<StudentES> selectByDynamicQuery(DynamicQuery<StudentES> dynamicQuery) {
-        return studentEsMapper.selectByDynamicQuery(elasticsearchTemplate, dynamicQuery);
+        return studentEsMapper.selectByDynamicQuery(dynamicQuery);
     }
 
     public void deleteByDynamicQuery(DynamicQuery<StudentES> dynamicQuery) {
-        studentEsMapper.deleteByDynamicQuery(elasticsearchTemplate, dynamicQuery);
+        studentEsMapper.deleteByDynamicQuery(dynamicQuery);
     }
 }
