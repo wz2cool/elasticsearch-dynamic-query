@@ -1,10 +1,9 @@
 package io.github.wz2cool.elasticsearch.mapper;
 
-import io.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import io.github.wz2cool.elasticsearch.cache.EntityCache;
-import io.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
-import com.github.wz2cool.elasticsearch.model.*;
+import io.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import io.github.wz2cool.elasticsearch.helper.CommonsHelper;
+import io.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import io.github.wz2cool.elasticsearch.model.*;
 import io.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import org.elasticsearch.index.query.BoolQueryBuilder;

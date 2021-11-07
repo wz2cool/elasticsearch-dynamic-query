@@ -1,9 +1,7 @@
 package io.github.wz2cool.elasticsearch.query;
 
-import com.github.wz2cool.elasticsearch.lambda.*;
 import io.github.wz2cool.elasticsearch.lambda.*;
 import io.github.wz2cool.elasticsearch.model.FilterMode;
-import com.github.wz2cool.elasticsearch.operator.*;
 import io.github.wz2cool.elasticsearch.operator.*;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;

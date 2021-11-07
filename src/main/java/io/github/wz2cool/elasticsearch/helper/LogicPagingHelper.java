@@ -2,7 +2,6 @@ package io.github.wz2cool.elasticsearch.helper;
 
 import io.github.wz2cool.elasticsearch.cache.EntityCache;
 import io.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
-import com.github.wz2cool.elasticsearch.model.*;
 import io.github.wz2cool.elasticsearch.model.*;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
