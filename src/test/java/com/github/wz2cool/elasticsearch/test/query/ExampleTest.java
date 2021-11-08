@@ -146,6 +146,8 @@ public class ExampleTest {
     @Test
     public void testNested() {
         DynamicQuery<MyStudentES> query = DynamicQuery.createQuery(MyStudentES.class)
+                .and("test", o -> o.multiMatch()
+                        .field(MyStudentES::getMyClassroom, MyStudentES::getName))
                 .or(MyStudentES::getMyClassroom, MyClassroomES::getId, o -> o.term(1L))
                 .or(MyStudentES::getMyClassroom, MyClassroomES::getId, o -> o.term(2L));
         final QueryBuilder queryBuilder = query.buildQuery();
