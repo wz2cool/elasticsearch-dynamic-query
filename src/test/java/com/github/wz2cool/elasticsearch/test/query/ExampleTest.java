@@ -4,6 +4,8 @@ import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
+import com.github.wz2cool.elasticsearch.test.model.MyClassroomES;
+import com.github.wz2cool.elasticsearch.test.model.MyStudentES;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
 import org.apache.commons.lang3.ArrayUtils;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
@@ -139,5 +141,12 @@ public class ExampleTest {
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
         assertEquals(Integer.valueOf(1), testExampleES.get(1).getP2());
+    }
+
+    @Test
+    public void testNested() {
+        DynamicQuery<MyStudentES> query = DynamicQuery.createQuery(MyStudentES.class)
+                .and(MyStudentES::getMyClassroom, MyClassroomES::getId, o -> o.term(1L));
+        final QueryBuilder queryBuilder = query.buildQuery();
     }
 }
