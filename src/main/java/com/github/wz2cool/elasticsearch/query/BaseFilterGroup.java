@@ -71,6 +71,14 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         return and(true, null, value, operatorFunc);
     }
 
+    public S and(boolean enable, String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        return and(enable, null, value, operatorFunc);
+    }
+
+    public S and(FilterMode filterMode, String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        return and(true, filterMode, value, operatorFunc);
+    }
+
     public S and(boolean enable,
                  FilterMode filterMode,
                  String value,
