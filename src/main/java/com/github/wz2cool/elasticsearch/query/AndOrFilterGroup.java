@@ -11,7 +11,7 @@ import java.util.function.Function;
 /**
  * @author Frank
  **/
-class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndOneNestedFilterGroup<T, S> {
+class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends OrOneNestedFilterGroup<T, S> {
 
     /// region or
 
@@ -356,38 +356,6 @@ class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndOneNested
     /// endregion
 
     /// endregion
-
-    /// endregion
-
-    /// region internal
-
-    protected <R extends Comparable> S orInternal(
-            boolean enable,
-            GetPropertyFunction<T, R> getPropertyFunc,
-            SingleFilterOperators<R> singleFilterOperators,
-            Function<SingleFilterOperators<R>, IFilterOperator<R>> operatorFunc) {
-        if (!enable) {
-            return (S) this;
-        }
-        final IFilterOperator<R> filterOperator = operatorFunc.apply(singleFilterOperators);
-        final QueryBuilder queryBuilder = filterOperator.buildQuery(getColumnName(getPropertyFunc));
-        booleanQueryBuilder.should(queryBuilder);
-        return (S) this;
-    }
-
-    protected <R extends Comparable> S orInternal(
-            boolean enable,
-            GetArrayPropertyFunction<T, R> getPropertyFunc,
-            ArrayFilterOperators<R> arrayFilterOperators,
-            Function<ArrayFilterOperators<R>, IArrayFilterOperator<R>> operatorFunc) {
-        if (!enable) {
-            return (S) this;
-        }
-        final IArrayFilterOperator<R> apply = operatorFunc.apply(arrayFilterOperators);
-        final QueryBuilder queryBuilder = apply.buildQuery(getColumnName(getPropertyFunc));
-        booleanQueryBuilder.should(queryBuilder);
-        return (S) this;
-    }
 
     /// endregion
 }

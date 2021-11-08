@@ -11,7 +11,6 @@ import com.github.wz2cool.elasticsearch.operator.ArrayFilterOperators;
 import com.github.wz2cool.elasticsearch.operator.IArrayFilterOperator;
 import com.github.wz2cool.elasticsearch.operator.IFilterOperator;
 import com.github.wz2cool.elasticsearch.operator.SingleFilterOperators;
-import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
@@ -150,9 +149,73 @@ abstract class RootFilterGroup<T, S extends RootFilterGroup<T, S>> {
         return (S) this;
     }
 
+    /// region or
+
+    protected <R extends Comparable> S orInternal(
+            boolean enable,
+            GetPropertyFunction<T, R> getPropertyFunc,
+            SingleFilterOperators<R> singleFilterOperators,
+            Function<SingleFilterOperators<R>, IFilterOperator<R>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IFilterOperator<R> filterOperator = operatorFunc.apply(singleFilterOperators);
+        final QueryBuilder queryBuilder = filterOperator.buildQuery(getColumnName(getPropertyFunc));
+        booleanQueryBuilder.should(queryBuilder);
+        return (S) this;
+    }
+
+    protected <P1, R extends Comparable> S orInternal(
+            boolean enable,
+            GetPropertyFunction<T, P1> getP1Func,
+            GetPropertyFunction<P1, R> getPropertyFunc,
+            SingleFilterOperators<R> singleFilterOperators,
+            Function<SingleFilterOperators<R>, IFilterOperator<R>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IFilterOperator<R> filterOperator = operatorFunc.apply(singleFilterOperators);
+        String columnName = getColumnName(getP1Func, getPropertyFunc);
+        final QueryBuilder queryBuilder = filterOperator.buildQuery(columnName);
+        booleanQueryBuilder.should(queryBuilder);
+        return (S) this;
+    }
+
+    protected <R extends Comparable> S orInternal(
+            boolean enable,
+            GetArrayPropertyFunction<T, R> getPropertyFunc,
+            ArrayFilterOperators<R> arrayFilterOperators,
+            Function<ArrayFilterOperators<R>, IArrayFilterOperator<R>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IArrayFilterOperator<R> apply = operatorFunc.apply(arrayFilterOperators);
+        final QueryBuilder queryBuilder = apply.buildQuery(getColumnName(getPropertyFunc));
+        booleanQueryBuilder.should(queryBuilder);
+        return (S) this;
+    }
+
+    protected <P1, R extends Comparable> S orInternal(
+            boolean enable,
+            GetPropertyFunction<T, P1> getP1Func,
+            GetArrayPropertyFunction<P1, R> getPropertyFunc,
+            ArrayFilterOperators<R> arrayFilterOperators,
+            Function<ArrayFilterOperators<R>, IArrayFilterOperator<R>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IArrayFilterOperator<R> apply = operatorFunc.apply(arrayFilterOperators);
+        String columnName = getColumnName(getP1Func, getPropertyFunc);
+        final QueryBuilder queryBuilder = apply.buildQuery(columnName);
+        booleanQueryBuilder.should(queryBuilder);
+        return (S) this;
+    }
+
     /// endregion
 
-    protected  <R> String getColumnName(GetPropertyFunction<T, R> getPropertyFunc) {
+    /// endregion
+
+    protected <R> String getColumnName(GetPropertyFunction<T, R> getPropertyFunc) {
         return getColumnInfo(getPropertyFunc).getColumnName();
     }
 
