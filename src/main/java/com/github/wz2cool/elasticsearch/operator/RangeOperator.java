@@ -1,7 +1,5 @@
 package com.github.wz2cool.elasticsearch.operator;
 
-import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
-import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.RangeQueryBuilder;
@@ -111,9 +109,8 @@ public class RangeOperator<R> implements IFilterOperator<R> {
     }
 
     @Override
-    public <T> QueryBuilder buildQuery(GetPropertyFunction<T, R> getPropertyFunc) {
-        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
-        RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder(columnInfo.getColumnName());
+    public QueryBuilder buildQuery(String columnName) {
+        RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder(columnName);
         if (Objects.nonNull(gt)) {
             rangeQueryBuilder.gt(getFilterValue(gt));
         }

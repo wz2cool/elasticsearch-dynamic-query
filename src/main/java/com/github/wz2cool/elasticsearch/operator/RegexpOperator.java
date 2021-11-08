@@ -20,8 +20,7 @@ public class RegexpOperator implements IFilterOperator<String> {
     }
 
     @Override
-    public <T> QueryBuilder buildQuery(GetPropertyFunction<T, String> getPropertyFunc) {
-        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
-        return new RegexpQueryBuilder(columnInfo.getColumnName(), regexp);
+    public QueryBuilder buildQuery(String columnName) {
+        return new RegexpQueryBuilder(columnName, regexp);
     }
 }

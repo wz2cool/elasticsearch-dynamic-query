@@ -11,7 +11,7 @@ import java.util.function.Function;
 /**
  * @author Frank
  **/
-class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndFilterGroup<T, S> {
+class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndOneNestedFilterGroup<T, S> {
 
     /// region or
 
@@ -370,7 +370,7 @@ class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndFilterGro
             return (S) this;
         }
         final IFilterOperator<R> filterOperator = operatorFunc.apply(singleFilterOperators);
-        final QueryBuilder queryBuilder = filterOperator.buildQuery(getPropertyFunc);
+        final QueryBuilder queryBuilder = filterOperator.buildQuery(getColumnName(getPropertyFunc));
         booleanQueryBuilder.should(queryBuilder);
         return (S) this;
     }
@@ -384,7 +384,7 @@ class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndFilterGro
             return (S) this;
         }
         final IArrayFilterOperator<R> apply = operatorFunc.apply(arrayFilterOperators);
-        final QueryBuilder queryBuilder = apply.buildQuery(getPropertyFunc);
+        final QueryBuilder queryBuilder = apply.buildQuery(getColumnName(getPropertyFunc));
         booleanQueryBuilder.should(queryBuilder);
         return (S) this;
     }

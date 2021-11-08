@@ -1,7 +1,5 @@
 package com.github.wz2cool.elasticsearch.operator;
 
-import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
-import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
 import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -24,9 +22,9 @@ public class MatchPhraseOperator implements IFilterOperator<String> {
     }
 
     @Override
-    public <T> QueryBuilder buildQuery(GetPropertyFunction<T, String> getPropertyFunc) {
-        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
-        final MatchPhraseQueryBuilder matchPhraseQueryBuilder = new MatchPhraseQueryBuilder(columnInfo.getColumnName(), value);
+    public QueryBuilder buildQuery(String columnName) {
+
+        final MatchPhraseQueryBuilder matchPhraseQueryBuilder = new MatchPhraseQueryBuilder(columnName, value);
         if (Objects.nonNull(analyzer)) {
             matchPhraseQueryBuilder.analyzer(analyzer);
         }

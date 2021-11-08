@@ -3,7 +3,6 @@ package com.github.wz2cool.elasticsearch.query;
 import com.github.wz2cool.elasticsearch.lambda.*;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.operator.*;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.math.BigDecimal;
