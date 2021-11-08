@@ -979,7 +979,6 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
 
     /// endregion
 
-
     /// region group
 
     public S and(UnaryOperator<FilterGroup<T>> groupConsumer) {
@@ -1050,7 +1049,11 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         return (S) this;
     }
 
-    /// region
+    /// endregion
+
+    /// region and object
+
+    /// endregion
 
     /// region internal
 
@@ -1087,9 +1090,10 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     private S andInternal(
             FilterMode filterMode,
             QueryBuilder queryBuilder) {
-        if (filterMode == FilterMode.MUST) {
+        FilterMode useFilterMode = Objects.isNull(filterMode) ? FilterMode.MUST : filterMode;
+        if (useFilterMode == FilterMode.MUST) {
             booleanQueryBuilder.must(queryBuilder);
-        } else if (filterMode == FilterMode.MUST_NOT) {
+        } else if (useFilterMode == FilterMode.MUST_NOT) {
             booleanQueryBuilder.mustNot(queryBuilder);
         } else {
             booleanQueryBuilder.filter(queryBuilder);
