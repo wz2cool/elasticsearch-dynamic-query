@@ -79,5 +79,7 @@ public class StudentTest {
                 .and(StudentES::getNameWide, o -> o.term("student1"));
         final QueryBuilder queryBuilder = query.buildQuery();
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
+        assertEquals(1, studentESList.size());
+        assertEquals(Long.valueOf(1), studentESList.get(0).getId());
     }
 }
