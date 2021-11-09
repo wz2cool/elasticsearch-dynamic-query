@@ -53,14 +53,14 @@ public class MultiMatchOperator<T> {
     /**
      * See also {@link MultiMatchQueryBuilder#field(String field)}
      */
-    public <P1> MultiMatchOperator<T> field(GetPropertyFunction<T, P1> getP1Func, GetStringPropertyFunction<T> getPropertyFunc) {
+    public <P1> MultiMatchOperator<T> field(GetPropertyFunction<T, P1> getP1Func, GetStringPropertyFunction<P1> getPropertyFunc) {
         return field(getP1Func, getPropertyFunc, DEFAULT_BOOST);
     }
 
     /**
      * See also {@link MultiMatchQueryBuilder#field(String field, float boost)}
      */
-    public <P1> MultiMatchOperator<T> field(GetPropertyFunction<T, P1> getP1Func, GetStringPropertyFunction<T> getPropertyFunc, float boost) {
+    public <P1> MultiMatchOperator<T> field(GetPropertyFunction<T, P1> getP1Func, GetStringPropertyFunction<P1> getPropertyFunc, float boost) {
         final ColumnInfo columnInfo = getColumnInfo(getP1Func);
         final ColumnInfo columnInfo1 = getColumnInfo(getPropertyFunc);
         String columnName = columnInfo.getColumnName() + "." + columnInfo1.getColumnName();
@@ -194,7 +194,7 @@ public class MultiMatchOperator<T> {
         return multiMatchQueryBuilder;
     }
 
-    private <R> ColumnInfo getColumnInfo(GetPropertyFunction<T, R> getPropertyFunc) {
+    private <T1, R> ColumnInfo getColumnInfo(GetPropertyFunction<T1, R> getPropertyFunc) {
         final PropertyInfo propertyInfo = CommonsHelper.getPropertyInfo(getPropertyFunc);
         return EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
     }
