@@ -62,7 +62,7 @@ public class StudentTest {
     }
 
     @Test
-    public void testNested() {
+    public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
         final QueryBuilder queryBuilder = query.buildQuery();
@@ -71,5 +71,13 @@ public class StudentTest {
         for (StudentES studentES : studentESList) {
             assertEquals(Long.valueOf(1), studentES.getClassroom().getId());
         }
+    }
+
+    @Test
+    public void testNested() {
+        DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .and(StudentES::getNameWide, o -> o.term("student1"));
+        final QueryBuilder queryBuilder = query.buildQuery();
+        final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
     }
 }

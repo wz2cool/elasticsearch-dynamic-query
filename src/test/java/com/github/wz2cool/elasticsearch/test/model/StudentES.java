@@ -17,6 +17,8 @@ public class StudentES {
             }
     )
     private String name;
+    @Field("name.wide")
+    private String nameWide;
     private Integer age;
     @Transient
     private String nameHit;
@@ -69,5 +71,13 @@ public class StudentES {
 
     public void setClassroom(ClassroomES classroom) {
         this.classroom = classroom;
+    }
+
+    public String getNameWide() {
+        return nameWide;
+    }
+
+    public void setNameWide(String nameWide) {
+        this.nameWide = nameWide;
     }
 }
