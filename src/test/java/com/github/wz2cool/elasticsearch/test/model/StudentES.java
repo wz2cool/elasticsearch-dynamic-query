@@ -3,6 +3,8 @@ package com.github.wz2cool.elasticsearch.test.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Document(indexName = "test_student", type = "testStudent")
 public class StudentES {
@@ -14,6 +16,8 @@ public class StudentES {
     private Integer age;
     @Transient
     private String nameHit;
+    @Field(type = FieldType.Object)
+    private ClassroomES classroom;
 
     public Long getId() {
         return id;
@@ -53,5 +57,13 @@ public class StudentES {
 
     public void setScore(float score) {
         this.score = score;
+    }
+
+    public ClassroomES getClassroom() {
+        return classroom;
+    }
+
+    public void setClassroom(ClassroomES classroom) {
+        this.classroom = classroom;
     }
 }

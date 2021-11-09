@@ -1,13 +1,7 @@
 package com.github.wz2cool.elasticsearch.test.model;
 
-import org.springframework.data.annotation.Id;
+public class ClassroomES {
 
-/**
- * @author Frank
- **/
-public class MyClassroomES {
-
-    @Id
     private Long id;
     private String name;
 
