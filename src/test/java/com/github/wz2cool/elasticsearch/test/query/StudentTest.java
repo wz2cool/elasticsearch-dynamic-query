@@ -76,7 +76,10 @@ public class StudentTest {
     @Test
     public void testNested() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
-                .and(StudentES::getNameWide, o -> o.term("student1"));
+                .and(StudentES::getName, o -> o.term("student1"))
+                .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
+                .highlightMapping(StudentES::getName, StudentES::setNameHit)
+                .highlightMapping(StudentES::getNameWide, StudentES::setNameWideHit);
         final QueryBuilder queryBuilder = query.buildQuery();
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertEquals(1, studentESList.size());
