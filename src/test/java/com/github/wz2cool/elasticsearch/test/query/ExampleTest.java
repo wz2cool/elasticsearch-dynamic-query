@@ -1,10 +1,10 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
-import com.github.wz2cool.elasticsearch.test.TestApplication;
-import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
-import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
+import com.github.wz2cool.elasticsearch.test.TestApplication;
+import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
+import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
 import org.apache.commons.lang3.ArrayUtils;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;

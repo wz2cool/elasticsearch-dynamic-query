@@ -1,10 +1,9 @@
 package com.github.wz2cool.elasticsearch.cache;
 
 import com.github.wz2cool.elasticsearch.helper.ReflectHelper;
-import com.github.wz2cool.exception.PropertyNotFoundInternalException;
 import com.github.wz2cool.elasticsearch.model.ColumnInfo;
+import com.github.wz2cool.exception.PropertyNotFoundInternalException;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.annotation.Transient;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -46,10 +45,6 @@ public class EntityCache {
         Map<String, ColumnInfo> map = new ConcurrentHashMap<>();
         for (Field field : properties) {
             field.setAccessible(true);
-            // and Transient
-            if (field.isAnnotationPresent(Transient.class)) {
-                continue;
-            }
             final String propertyName = field.getName();
             final String columnName = getColumnNameByProperty(field);
             ColumnInfo columnInfo = new ColumnInfo();
