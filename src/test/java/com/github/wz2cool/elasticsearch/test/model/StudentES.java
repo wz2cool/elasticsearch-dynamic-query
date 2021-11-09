@@ -2,9 +2,7 @@ package com.github.wz2cool.elasticsearch.test.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.*;
 
 @Document(indexName = "test_student", type = "testStudent")
 public class StudentES {
@@ -12,6 +10,12 @@ public class StudentES {
     private float score;
     @Id
     private Long id;
+    @MultiField(
+            mainField = @Field(type = FieldType.Text),
+            otherFields = {
+                    @InnerField(suffix = "wide", type = FieldType.Keyword)
+            }
+    )
     private String name;
     private Integer age;
     @Transient
