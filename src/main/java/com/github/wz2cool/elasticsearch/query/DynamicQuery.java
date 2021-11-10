@@ -13,6 +13,7 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> impleme
     }
 
     @Override
-    public NativeSearchQueryBuilder buildNativeSearch() {
+    public NativeSearchQuery buildNativeSearch() {
         NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
         if (getQueryMode() == QueryMode.QUERY) {
             esQuery.withQuery(getFilterQuery());
@@ -113,6 +114,6 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> impleme
             esQuery.withSort(sortBuilder);
         }
         esQuery.withHighlightBuilder(getHighlightBuilder());
-        return esQuery;
+        return esQuery.build();
     }
 }

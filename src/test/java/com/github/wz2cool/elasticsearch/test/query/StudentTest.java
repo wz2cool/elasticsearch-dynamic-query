@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -65,6 +66,7 @@ public class StudentTest {
     public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
+        final NativeSearchQuery nativeSearchQuery = query.buildNativeSearch();
         final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList.size() > 0);
