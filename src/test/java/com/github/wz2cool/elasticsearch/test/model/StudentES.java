@@ -11,7 +11,7 @@ public class StudentES {
     @Id
     private Long id;
     @MultiField(
-            mainField = @Field(type = FieldType.Keyword),
+            mainField = @Field(type = FieldType.Text),
             otherFields = {
                     @InnerField(suffix = "wide", type = FieldType.Text)
             }
