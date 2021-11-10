@@ -51,9 +51,9 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
     public List<T> selectByDynamicQuery(DynamicQuery<T> dynamicQuery, int page, int pageSize) {
         NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
         if (dynamicQuery.getQueryMode() == QueryMode.QUERY) {
-            esQuery.withQuery(dynamicQuery.buildQuery());
+            esQuery.withQuery(dynamicQuery.getFilterQuery());
         } else {
-            esQuery.withFilter(dynamicQuery.buildQuery());
+            esQuery.withFilter(dynamicQuery.getFilterQuery());
         }
         for (SortBuilder sortBuilder : dynamicQuery.getSortBuilders()) {
             esQuery.withSort(sortBuilder);
@@ -77,7 +77,7 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
 
     @Override
     public void deleteByDynamicQuery(DynamicQuery<T> dynamicQuery) {
-        final QueryBuilder queryBuilder = dynamicQuery.buildQuery();
+        final QueryBuilder queryBuilder = dynamicQuery.getFilterQuery();
         DeleteQuery deleteQuery = new DeleteQuery();
         deleteQuery.setQuery(queryBuilder);
         elasticsearchOperations.delete(deleteQuery, dynamicQuery.getClazz());

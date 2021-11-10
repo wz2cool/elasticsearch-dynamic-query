@@ -65,7 +65,7 @@ public class StudentTest {
     public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
-        final QueryBuilder queryBuilder = query.buildQuery();
+        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList.size() > 0);
         for (StudentES studentES : studentESList) {
@@ -80,7 +80,7 @@ public class StudentTest {
                 .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
                 .highlightMapping(StudentES::getName, StudentES::setNameHit)
                 .highlightMapping(StudentES::getNameWide, StudentES::setNameWideHit);
-        final QueryBuilder queryBuilder = query.buildQuery();
+        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertEquals(1, studentESList.size());
         assertEquals(Long.valueOf(1), studentESList.get(0).getId());
