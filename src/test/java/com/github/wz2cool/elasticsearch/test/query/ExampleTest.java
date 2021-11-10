@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -102,7 +101,6 @@ public class ExampleTest {
     public void testRangeInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(TestExampleES::getId, o -> o.gt(1L).lt(3L));
-        final NativeSearchQuery nativeSearchQuery = query.buildNativeSearch();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(2), testExampleES.get(0).getP2());
     }
