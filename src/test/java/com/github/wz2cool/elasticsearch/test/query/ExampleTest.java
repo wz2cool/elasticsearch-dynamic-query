@@ -22,6 +22,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -67,7 +68,7 @@ public class ExampleTest {
     public void testTermInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(TestExampleES::getId, o -> o.term(3L))
-                .orderBy(TestExampleES::getId, SortOrder.ASC);
+                .orderBy(TestExampleES::getId, asc());
         final QueryBuilder queryBuilder = query.buildQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
@@ -77,7 +78,7 @@ public class ExampleTest {
     public void testArrayTermInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(TestExampleES::getP9, o -> o.term(8))
-                .orderBy(TestExampleES::getId, SortOrder.ASC);
+                .orderBy(TestExampleES::getId, asc());
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertTrue(testExampleES.size() > 0);
         for (TestExampleES testExample : testExampleES) {
@@ -89,8 +90,8 @@ public class ExampleTest {
     @Test
     public void testTermsInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
-                .and(FilterMode.FILTER, TestExampleES::getId, o -> o.terms(3L, 6L, 9L))
-                .orderBy(TestExampleES::getId, SortOrder.ASC);
+                .and(filter(), TestExampleES::getId, o -> o.terms(3L, 6L, 9L))
+                .orderBy(TestExampleES::getId, asc());
         final QueryBuilder queryBuilder = query.buildQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
@@ -134,7 +135,7 @@ public class ExampleTest {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .or(TestExampleES::getId, o -> o.term(1L))
                 .or(TestExampleES::getId, o -> o.term(3L))
-                .orderBy(TestExampleES::getId, SortOrder.DESC);
+                .orderBy(TestExampleES::getId, desc());
         final QueryBuilder queryBuilder = query.buildQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
