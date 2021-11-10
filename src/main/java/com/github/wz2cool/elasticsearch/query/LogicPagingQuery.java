@@ -9,6 +9,7 @@ import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import com.github.wz2cool.elasticsearch.model.PropertyInfo;
 import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.model.UpDown;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
@@ -20,6 +21,7 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
     private final UpDown upDown;
     private final SortOrder sortOrder;
     private final GetLongPropertyFunction<T> pagingPropertyFunc;
+    private QueryBuilder queryBuilder;
     private int pageSize = 10;
     private Long lastStartPageId;
     private Long lastEndPageId;
@@ -61,6 +63,14 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
         highlightBuilder.field(columnInfo.getColumnName());
         highlightResultMapper.registerHitMapping(this.clazz, getSearchPropertyFunc, setHighLightPropertyFunc);
         return this;
+    }
+
+    public QueryBuilder getQueryBuilder() {
+        return queryBuilder != null ? queryBuilder : getFilterQuery();
+    }
+
+    public void setQueryBuilder(QueryBuilder queryBuilder) {
+        this.queryBuilder = queryBuilder;
     }
 
     public Class<T> getClazz() {
