@@ -84,7 +84,8 @@ public class StudentTest {
                 .and(StudentES::getName, o -> o.term("student1"))
                 .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
                 .orderBy(StudentES::getId, asc());
-        final String s = query.buildQueryJson();
+        final String json = query.buildQueryJson();
+        System.out.println(json);
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertEquals(1, studentESList.size());
         assertEquals(Long.valueOf(1), studentESList.get(0).getId());
