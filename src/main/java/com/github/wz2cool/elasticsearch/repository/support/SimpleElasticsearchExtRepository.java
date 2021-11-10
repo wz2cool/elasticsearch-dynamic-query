@@ -11,7 +11,6 @@ import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtRepository;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,16 +48,7 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
 
     @Override
     public List<T> selectByDynamicQuery(DynamicQuery<T> dynamicQuery, int page, int pageSize) {
-        NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
-        if (dynamicQuery.getQueryMode() == QueryMode.QUERY) {
-            esQuery.withQuery(dynamicQuery.getFilterQuery());
-        } else {
-            esQuery.withFilter(dynamicQuery.getFilterQuery());
-        }
-        for (SortBuilder sortBuilder : dynamicQuery.getSortBuilders()) {
-            esQuery.withSort(sortBuilder);
-        }
-        esQuery.withHighlightBuilder(dynamicQuery.getHighlightBuilder());
+        NativeSearchQueryBuilder esQuery = dynamicQuery.buildNativeSearch();
         final PageRequest pageRequest = PageRequest.of(page, pageSize);
         esQuery.withPageable(pageRequest);
         Page<T> ts = elasticsearchOperations.queryForPage(
