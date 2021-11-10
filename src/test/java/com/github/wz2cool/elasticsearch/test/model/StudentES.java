@@ -11,9 +11,9 @@ public class StudentES {
     @Id
     private Long id;
     @MultiField(
-            mainField = @Field(type = FieldType.Text),
+            mainField = @Field(type = FieldType.Keyword),
             otherFields = {
-                    @InnerField(suffix = "wide", type = FieldType.Keyword)
+                    @InnerField(suffix = "wide", type = FieldType.Text)
             }
     )
     private String name;
@@ -23,6 +23,9 @@ public class StudentES {
     private Integer age;
     @Transient
     private String nameHit;
+    @Transient
+    private String nameWideHit;
+
     @Field(type = FieldType.Object)
     private ClassroomES classroom;
 
@@ -80,5 +83,13 @@ public class StudentES {
 
     public void setNameWide(String nameWide) {
         this.nameWide = nameWide;
+    }
+
+    public String getNameWideHit() {
+        return nameWideHit;
+    }
+
+    public void setNameWideHit(String nameWideHit) {
+        this.nameWideHit = nameWideHit;
     }
 }
