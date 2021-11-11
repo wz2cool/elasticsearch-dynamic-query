@@ -24,8 +24,8 @@ public interface IElasticsearchQuery {
                 .append("\"query\":")
                 .append(nativeSearchQuery.getQuery().toString()).append(",");
         if (!CollectionUtils.isEmpty(nativeSearchQuery.getElasticsearchSorts())) {
-            stringBuilder.append("\"sort\":")
-                    .append(sortItems).append(",");
+            stringBuilder.append("\"sort\":[")
+                    .append(sortItems).append("],");
         }
         stringBuilder.append("\"highlight\":")
                 .append(nativeSearchQuery.getHighlightBuilder().toString())
