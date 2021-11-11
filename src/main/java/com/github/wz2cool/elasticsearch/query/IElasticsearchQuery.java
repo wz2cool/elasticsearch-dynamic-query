@@ -15,8 +15,7 @@ public interface IElasticsearchQuery {
 
     NativeSearchQuery buildNativeSearch();
 
-    default String buildQueryJson() {
-        final NativeSearchQuery nativeSearchQuery = buildNativeSearch();
+    default String buildQueryJson(NativeSearchQuery nativeSearchQuery) {
         StringBuilder stringBuilder = new StringBuilder();
         final List<String> sortStrings = nativeSearchQuery.getElasticsearchSorts()
                 .stream().map(SortBuilder::toString).collect(Collectors.toList());

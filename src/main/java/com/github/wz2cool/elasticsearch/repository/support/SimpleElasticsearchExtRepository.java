@@ -9,6 +9,8 @@ import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtRepository;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -24,6 +26,8 @@ import java.util.*;
  * @author Frank
  **/
 public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchRepository<T, I> implements ElasticsearchExtRepository<T, I> {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SimpleElasticsearchExtRepository() {
         super();
@@ -48,6 +52,12 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
         NativeSearchQuery esQuery = dynamicQuery.buildNativeSearch();
         final PageRequest pageRequest = PageRequest.of(page, pageSize);
         esQuery.setPageable(pageRequest);
+
+        if (logger.isDebugEnabled()) {
+            String json = dynamicQuery.buildQueryJson(esQuery);
+            logger.debug("selectByDynamicQuery: {}{}", System.lineSeparator(), json);
+        }
+
         Page<T> ts = elasticsearchOperations.queryForPage(
                 esQuery, dynamicQuery.getClazz(), dynamicQuery.getHighlightResultMapper());
         return new ArrayList<>(ts.getContent());
@@ -67,6 +77,11 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
         final QueryBuilder queryBuilder = dynamicQuery.getFilterQuery();
         DeleteQuery deleteQuery = new DeleteQuery();
         deleteQuery.setQuery(queryBuilder);
+        if (logger.isDebugEnabled()) {
+            final NativeSearchQuery nativeSearchQuery = dynamicQuery.buildNativeSearch();
+            String json = dynamicQuery.buildQueryJson(nativeSearchQuery);
+            logger.debug("deleteByDynamicQuery: {}{}", System.lineSeparator(), json);
+        }
         elasticsearchOperations.delete(deleteQuery, dynamicQuery.getClazz());
     }
 
@@ -74,6 +89,10 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
     public LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery) {
         NativeSearchQuery esQuery = logicPagingQuery.buildNativeSearch();
         final SortOrder sortOrder = esQuery.getElasticsearchSorts().get(0).order();
+        if (logger.isDebugEnabled()) {
+            String json = logicPagingQuery.buildQueryJson(esQuery);
+            logger.debug("selectByLogicPaging: {}{}", System.lineSeparator(), json);
+        }
         Page<T> ts;
         final HighlightResultMapper highlightResultMapper = logicPagingQuery.getHighlightResultMapper();
         if (Objects.nonNull(highlightResultMapper)

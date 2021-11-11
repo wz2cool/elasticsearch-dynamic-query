@@ -5,12 +5,10 @@ import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.ClassroomES;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -67,8 +65,6 @@ public class StudentTest {
     public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
-        final NativeSearchQuery nativeSearchQuery = query.buildNativeSearch();
-        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList.size() > 0);
         for (StudentES studentES : studentESList) {
@@ -84,8 +80,6 @@ public class StudentTest {
                 .and(StudentES::getName, o -> o.term("student1"))
                 .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
                 .orderBy(StudentES::getId, asc());
-        final String json = query.buildQueryJson();
-        System.out.println(json);
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertEquals(1, studentESList.size());
         assertEquals(Long.valueOf(1), studentESList.get(0).getId());
