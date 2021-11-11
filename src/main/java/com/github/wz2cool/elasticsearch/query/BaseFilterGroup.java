@@ -43,6 +43,37 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> extend
         return (S) this;
     }
 
+    public S and(BaseFilterGroup<T, S> filterGroup) {
+        return and(true, null, filterGroup);
+    }
+
+    public S and(boolean enable, BaseFilterGroup<T, S> filterGroup) {
+        return and(enable, null, filterGroup);
+    }
+
+    public S and(FilterMode filterMode, BaseFilterGroup<T, S> filterGroup) {
+        return and(true, filterMode, filterGroup);
+    }
+
+    public S and(boolean enable, FilterMode filterMode, BaseFilterGroup<T, S> filterGroup) {
+        if (!enable) {
+            return (S) this;
+        }
+        final QueryBuilder queryBuilder = filterGroup.getFilterQuery();
+        return andInternal(filterMode, queryBuilder);
+    }
+
+    public S or(BaseFilterGroup<T, S> filterGroup) {
+        return or(true, filterGroup);
+    }
+
+    public S or(boolean enable, BaseFilterGroup<T, S> filterGroup) {
+        if (enable) {
+            booleanQueryBuilder.should(filterGroup.getFilterQuery());
+        }
+        return (S) this;
+    }
+
     /// endregion
 
     /// region custom
