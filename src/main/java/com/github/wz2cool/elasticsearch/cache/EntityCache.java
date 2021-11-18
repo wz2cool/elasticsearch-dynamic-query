@@ -58,7 +58,11 @@ public class EntityCache {
 
     public String getColumnNameByProperty(Field field) {
         if (field.isAnnotationPresent(org.springframework.data.elasticsearch.annotations.Field.class)) {
-            final String value = field.getAnnotation(org.springframework.data.elasticsearch.annotations.Field.class).value();
+            String value = field.getAnnotation(org.springframework.data.elasticsearch.annotations.Field.class).value();
+            if (StringUtils.isBlank(value)) {
+                // 拿不到value 拿name
+                value = field.getAnnotation(org.springframework.data.elasticsearch.annotations.Field.class).name();
+            }
             if (StringUtils.isNotBlank(value)) {
                 return value;
             } else {
