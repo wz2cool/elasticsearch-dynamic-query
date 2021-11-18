@@ -88,7 +88,7 @@ public class ExampleTest {
     @Test
     public void testTermsInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
-                .and(filter(), TestExampleES::getId, o -> o.terms(3L, 6L, 9L))
+                .and(TestExampleES::getId, o -> o.terms(3L, 6L, 9L))
                 .orderBy(TestExampleES::getId, asc());
         final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
