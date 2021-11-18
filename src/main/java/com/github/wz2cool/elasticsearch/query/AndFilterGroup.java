@@ -102,26 +102,24 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
 
     public S and(GetBigDecimalPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, null, getPropertyFunc, operatorFunc);
+        return and(true, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBigDecimalPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(enable, null, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getPropertyFunc, BIG_DECIMAL_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(FilterMode filterMode,
-                 GetBigDecimalPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, filterMode, getPropertyFunc, operatorFunc);
+    public S andNot(GetBigDecimalPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
+        return andNot(true, getPropertyFunc, operatorFunc);
     }
 
-    public S and(boolean enable,
-                 FilterMode filterMode,
-                 GetBigDecimalPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return andInternal(enable, filterMode, getPropertyFunc, BIG_DECIMAL_FILTER_OPERATORS, operatorFunc);
+    public S andNot(boolean enable,
+                    GetBigDecimalPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getPropertyFunc, BIG_DECIMAL_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
