@@ -18,7 +18,7 @@ public class StudentES {
     )
     private String name;
     @Transient
-    @Field("name.wide")
+    @Field(name = "name.wide")
     private String nameWide;
     private Integer age;
     @Transient

@@ -5,6 +5,7 @@ import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.ClassroomES;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
+import org.elasticsearch.index.query.Operator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +65,7 @@ public class StudentTest {
     @Test
     public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
-                .andNot("", o-> o.multiMatch(StudentES::getName))
+                .andNot("", o -> o.multiMatch(StudentES::getName))
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList.size() > 0);
@@ -78,8 +79,10 @@ public class StudentTest {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
                 .highlightMapping(StudentES::getName, StudentES::setNameHit)
                 .highlightMapping(StudentES::getNameWide, StudentES::setNameWideHit)
+                .and(StudentES::getName, o -> o.match("asdfasdf").operator(Operator.AND).boost(2.0f))
                 .and(StudentES::getName, o -> o.term("student1"))
-                .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
+                .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide)
+                        .field(StudentES::getName, 1.5f))
                 .orderBy(StudentES::getId, asc());
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertEquals(1, studentESList.size());
