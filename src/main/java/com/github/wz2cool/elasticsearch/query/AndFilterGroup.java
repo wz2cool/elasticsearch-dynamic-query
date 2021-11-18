@@ -128,26 +128,24 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
 
     public S and(GetBooleanPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(true, null, getPropertyFunc, operatorFunc);
+        return and(true, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBooleanPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(enable, null, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getPropertyFunc, BOOLEAN_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(FilterMode filterMode,
-                 GetBooleanPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(true, filterMode, getPropertyFunc, operatorFunc);
+    public S andNot(GetBooleanPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
+        return andNot(true, getPropertyFunc, operatorFunc);
     }
 
-    public S and(boolean enable,
-                 FilterMode filterMode,
-                 GetBooleanPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return andInternal(enable, filterMode, getPropertyFunc, BOOLEAN_FILTER_OPERATORS, operatorFunc);
+    public S andNot(boolean enable,
+                    GetBooleanPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getPropertyFunc, BOOLEAN_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -156,26 +154,26 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
 
     public S and(GetBytePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(true, null, getPropertyFunc, operatorFunc);
+        return and(true, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetBytePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(enable, null, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getPropertyFunc, BYTE_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(FilterMode filterMode,
-                 GetBytePropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(true, filterMode, getPropertyFunc, operatorFunc);
+    public S andNot(
+            GetBytePropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
+        return andNot(true, getPropertyFunc, operatorFunc);
     }
 
-    public S and(boolean enable,
-                 FilterMode filterMode,
-                 GetBytePropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return andInternal(enable, filterMode, getPropertyFunc, BYTE_FILTER_OPERATORS, operatorFunc);
+    public S andNot(
+            boolean enable,
+            GetBytePropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getPropertyFunc, BYTE_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -184,26 +182,25 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
 
     public S and(GetDatePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(true, null, getPropertyFunc, operatorFunc);
+        return and(true, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetDatePropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(enable, null, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getPropertyFunc, DATE_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(FilterMode filterMode,
-                 GetDatePropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(true, filterMode, getPropertyFunc, operatorFunc);
+    public S andNot(
+            GetDatePropertyFunction<T> getPropertyFunc,
+            Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
+        return andNot(true, getPropertyFunc, operatorFunc);
     }
 
-    public S and(boolean enable,
-                 FilterMode filterMode,
-                 GetDatePropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return andInternal(enable, filterMode, getPropertyFunc, DATE_FILTER_OPERATORS, operatorFunc);
+    public S andNot(boolean enable,
+                    GetDatePropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getPropertyFunc, DATE_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
