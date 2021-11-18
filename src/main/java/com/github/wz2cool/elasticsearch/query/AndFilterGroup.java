@@ -7,7 +7,6 @@ import org.elasticsearch.index.query.QueryBuilder;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -33,7 +32,7 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
 
     public S andNot(GetStringPropertyFunction<T> getPropertyFunc,
                     Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return andInternal(true, FilterMode.MUST_NOT, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
+        return andNot(true, getPropertyFunc, operatorFunc);
     }
 
     public S andNot(boolean enable, GetStringPropertyFunction<T> getPropertyFunc,
@@ -57,7 +56,7 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
     }
 
     public S andNot(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
-        return and(true, value, operatorFunc);
+        return andNot(true, value, operatorFunc);
     }
 
     public S andNot(boolean enable,
@@ -77,26 +76,24 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
 
     public S and(GetIntegerPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(true, null, getPropertyFunc, operatorFunc);
+        return and(true, getPropertyFunc, operatorFunc);
     }
 
     public S and(boolean enable,
                  GetIntegerPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(enable, null, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getPropertyFunc, INTEGER_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(FilterMode filterMode,
-                 GetIntegerPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(true, filterMode, getPropertyFunc, operatorFunc);
+    public S andNot(GetIntegerPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return andNot(true, getPropertyFunc, operatorFunc);
     }
 
-    public S and(boolean enable,
-                 FilterMode filterMode,
-                 GetIntegerPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return andInternal(enable, filterMode, getPropertyFunc, INTEGER_FILTER_OPERATORS, operatorFunc);
+    public S andNot(boolean enable,
+                    GetIntegerPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getPropertyFunc, INTEGER_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
