@@ -23,41 +23,29 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
 
     public S and(GetStringPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(true, null, getPropertyFunc, operatorFunc);
+        return andInternal(true, null, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
     public S and(boolean enable, GetStringPropertyFunction<T> getPropertyFunc,
                  Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(enable, null, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(FilterMode filterMode,
-                 GetStringPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(true, filterMode, getPropertyFunc, operatorFunc);
+    public S andNot(GetStringPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
+        return andInternal(true, FilterMode.MUST_NOT, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
-    public S and(boolean enable,
-                 FilterMode filterMode,
-                 GetStringPropertyFunction<T> getPropertyFunc,
-                 Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return andInternal(enable, filterMode, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
+    public S andNot(boolean enable, GetStringPropertyFunction<T> getPropertyFunc,
+                    Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
     public S and(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
-        return and(true, null, value, operatorFunc);
-    }
-
-    public S and(boolean enable, String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
-        return and(enable, null, value, operatorFunc);
-    }
-
-    public S and(FilterMode filterMode, String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
-        return and(true, filterMode, value, operatorFunc);
+        return and(true, value, operatorFunc);
     }
 
     public S and(boolean enable,
-                 FilterMode filterMode,
                  String value,
                  Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
         if (!enable) {
@@ -65,8 +53,22 @@ abstract class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFil
         }
         final MultiMatchOperator<T> operator = operatorFunc.apply(new MultiMatchOperators<>());
         final QueryBuilder queryBuilder = operator.buildQuery(value);
-        FilterMode useFilterMode = Objects.isNull(filterMode) ? operator.getDefaultFilterMode() : filterMode;
-        return andInternal(useFilterMode, queryBuilder);
+        return andInternal(operator.getDefaultFilterMode(), queryBuilder);
+    }
+
+    public S andNot(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        return and(true, value, operatorFunc);
+    }
+
+    public S andNot(boolean enable,
+                    String value,
+                    Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        if (!enable) {
+            return (S) this;
+        }
+        final MultiMatchOperator<T> operator = operatorFunc.apply(new MultiMatchOperators<>());
+        final QueryBuilder queryBuilder = operator.buildQuery(value);
+        return andInternal(FilterMode.MUST_NOT, queryBuilder);
     }
 
     /// endregion
