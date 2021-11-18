@@ -26,29 +26,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetStringPropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetStringPropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetStringPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetStringPropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetStringPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetStringPropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<String>, IFilterOperator<String>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, STRING_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -59,29 +58,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetIntegerPropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetIntegerPropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, INTEGER_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetIntegerPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetIntegerPropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetIntegerPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, INTEGER_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetIntegerPropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Integer>, IFilterOperator<Integer>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, INTEGER_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -92,29 +90,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetBigDecimalPropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetBigDecimalPropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, BIG_DECIMAL_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBigDecimalPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetBigDecimalPropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBigDecimalPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, BIG_DECIMAL_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetBigDecimalPropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<BigDecimal>, IFilterOperator<BigDecimal>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, BIG_DECIMAL_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -125,29 +122,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetBooleanPropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetBooleanPropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, BOOLEAN_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBooleanPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetBooleanPropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBooleanPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, BOOLEAN_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetBooleanPropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Boolean>, IFilterOperator<Boolean>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, BOOLEAN_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -158,29 +154,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetBytePropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetBytePropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, BYTE_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBytePropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(FilterMode filterMode,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetBytePropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBytePropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, BYTE_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetBytePropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Byte>, IFilterOperator<Byte>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, BYTE_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -191,29 +186,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetDatePropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetDatePropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, DATE_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDatePropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetDatePropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDatePropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, DATE_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetDatePropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Date>, IFilterOperator<Date>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, DATE_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -224,29 +218,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetDoublePropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetDoublePropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, DOUBLE_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDoublePropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetDoublePropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDoublePropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, DOUBLE_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetDoublePropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Double>, IFilterOperator<Double>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, DOUBLE_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -257,29 +250,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetFloatPropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetFloatPropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, FLOAT_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetFloatPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetFloatPropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetFloatPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, FLOAT_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetFloatPropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Float>, IFilterOperator<Float>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, FLOAT_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -290,29 +282,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetLongPropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetLongPropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, LONG_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetLongPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetLongPropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetLongPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, LONG_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetLongPropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Long>, IFilterOperator<Long>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, LONG_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -323,29 +314,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetShortPropertyFunction<P1> getPropertyFunc,
             Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetShortPropertyFunction<P1> getPropertyFunc,
                       Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, SHORT_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetShortPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetShortPropertyFunction<P1> getPropertyFunc,
+            Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetShortPropertyFunction<P1> getPropertyFunc,
-                      Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, SHORT_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetShortPropertyFunction<P1> getPropertyFunc,
+                         Function<SingleFilterOperators<Short>, IFilterOperator<Short>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, SHORT_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -360,29 +350,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetStringArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetStringArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, STRING_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetStringArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetStringArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetStringArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, STRING_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetStringArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<String>, IArrayFilterOperator<String>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, STRING_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -393,29 +382,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetIntegerArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetIntegerArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, INTEGER_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetIntegerArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetIntegerArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetIntegerArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, INTEGER_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetIntegerArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Integer>, IArrayFilterOperator<Integer>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, INTEGER_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -426,29 +414,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetBooleanArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetBooleanArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, BOOLEAN_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBooleanArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetBooleanArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBooleanArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, BOOLEAN_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetBooleanArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Boolean>, IArrayFilterOperator<Boolean>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, BOOLEAN_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -459,29 +446,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetByteArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetByteArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, BYTE_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetByteArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetByteArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetByteArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, BYTE_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetByteArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Byte>, IArrayFilterOperator<Byte>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, BYTE_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -492,29 +478,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetBigDecimalArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetBigDecimalArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, BIG_DECIMAL_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBigDecimalArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetBigDecimalArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetBigDecimalArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, BIG_DECIMAL_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetBigDecimalArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<BigDecimal>, IArrayFilterOperator<BigDecimal>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, BIG_DECIMAL_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -525,29 +510,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetDateArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetDateArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, DATE_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDateArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetDateArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDateArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, DATE_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetDateArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Date>, IArrayFilterOperator<Date>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, DATE_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -558,29 +542,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetDoubleArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetDoubleArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, DOUBLE_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDoubleArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetDoubleArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetDoubleArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, DOUBLE_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetDoubleArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Double>, IArrayFilterOperator<Double>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, DOUBLE_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -590,29 +573,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
     public <P1> S and(GetFloatArrayPropertyFunction<P1> getPropertyFunc,
                       GetPropertyFunction<T, P1> getP1Func,
                       Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetFloatArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, FLOAT_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetFloatArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetFloatArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetFloatArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, FLOAT_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetFloatArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Float>, IArrayFilterOperator<Float>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, FLOAT_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -623,29 +605,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetLongArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetLongArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, LONG_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetLongArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetLongArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetLongArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, LONG_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetLongArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Long>, IArrayFilterOperator<Long>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, LONG_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
@@ -656,29 +637,28 @@ abstract class AndOneNestedFilterGroup<T, S extends AndOneNestedFilterGroup<T, S
             GetPropertyFunction<T, P1> getP1Func,
             GetShortArrayPropertyFunction<P1> getPropertyFunc,
             Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
-        return and(true, null, getP1Func, getPropertyFunc, operatorFunc);
+        return and(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
     public <P1> S and(boolean enable,
                       GetPropertyFunction<T, P1> getP1Func,
                       GetShortArrayPropertyFunction<P1> getPropertyFunc,
                       Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
-        return and(enable, null, getP1Func, getPropertyFunc, operatorFunc);
+        return andInternal(enable, null, getP1Func, getPropertyFunc, SHORT_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
-    public <P1> S and(FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetShortArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
-        return and(true, filterMode, getP1Func, getPropertyFunc, operatorFunc);
+    public <P1> S andNot(
+            GetPropertyFunction<T, P1> getP1Func,
+            GetShortArrayPropertyFunction<P1> getPropertyFunc,
+            Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
+        return andNot(true, getP1Func, getPropertyFunc, operatorFunc);
     }
 
-    public <P1> S and(boolean enable,
-                      FilterMode filterMode,
-                      GetPropertyFunction<T, P1> getP1Func,
-                      GetShortArrayPropertyFunction<P1> getPropertyFunc,
-                      Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
-        return andInternal(enable, filterMode, getP1Func, getPropertyFunc, SHORT_ARRAY_FILTER_OPERATORS, operatorFunc);
+    public <P1> S andNot(boolean enable,
+                         GetPropertyFunction<T, P1> getP1Func,
+                         GetShortArrayPropertyFunction<P1> getPropertyFunc,
+                         Function<ArrayFilterOperators<Short>, IArrayFilterOperator<Short>> operatorFunc) {
+        return andInternal(enable, FilterMode.MUST_NOT, getP1Func, getPropertyFunc, SHORT_ARRAY_FILTER_OPERATORS, operatorFunc);
     }
 
     /// endregion
