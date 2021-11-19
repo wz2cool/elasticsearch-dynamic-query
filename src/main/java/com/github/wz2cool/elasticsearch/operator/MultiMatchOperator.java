@@ -35,6 +35,10 @@ public class MultiMatchOperator<T> {
         return FilterMode.MUST;
     }
 
+    public MultiMatchOperator() {
+        
+    }
+
     public MultiMatchOperator(GetStringPropertyFunction<T>[] getPropertyFuncs) {
         for (GetStringPropertyFunction<T> getPropertyFunc : getPropertyFuncs) {
             field(getPropertyFunc);
