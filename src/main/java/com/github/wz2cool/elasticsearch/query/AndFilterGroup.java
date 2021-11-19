@@ -92,27 +92,27 @@ class AndFilterGroup<T, S extends AndFilterGroup<T, S>> extends RootFilterGroup<
 
     /// region and array
 
-    protected <R extends Comparable> S and(
+    public <R extends Comparable> S and(
             GetArrayPropertyFunction<T, R> getPropertyFunc,
             Function<ArrayFilterOperators<R>, IArrayFilterOperator<R>> operatorFunc) {
         return andInternal(true, FilterMode.DEFAULT, getPropertyFunc, getArrayFilterOperators(), operatorFunc);
     }
 
-    protected <R extends Comparable> S and(
+    public <R extends Comparable> S and(
             boolean enable,
             GetArrayPropertyFunction<T, R> getPropertyFunc,
             Function<ArrayFilterOperators<R>, IArrayFilterOperator<R>> operatorFunc) {
         return andInternal(enable, FilterMode.DEFAULT, getPropertyFunc, getArrayFilterOperators(), operatorFunc);
     }
 
-    protected <R extends Comparable> S and(
+    public <R extends Comparable> S and(
             FilterMode filterMode,
             GetArrayPropertyFunction<T, R> getPropertyFunc,
             Function<ArrayFilterOperators<R>, IArrayFilterOperator<R>> operatorFunc) {
         return andInternal(true, filterMode, getPropertyFunc, getArrayFilterOperators(), operatorFunc);
     }
 
-    protected <R extends Comparable> S and(
+    public <R extends Comparable> S and(
             boolean enable,
             FilterMode filterMode,
             GetArrayPropertyFunction<T, R> getPropertyFunc,
