@@ -3,6 +3,7 @@ package com.github.wz2cool.elasticsearch.query;
 
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.util.CollectionUtils;
 
@@ -27,7 +28,6 @@ public interface IElasticsearchQuery {
         } else {
             queryBuilder = nativeSearchQuery.getFilter();
         }
-
         final String sortItems = String.join(",", sortStrings);
         stringBuilder.append("{")
                 .append("\"query\":")
@@ -38,7 +38,13 @@ public interface IElasticsearchQuery {
         }
         stringBuilder.append("\"highlight\":")
                 .append(nativeSearchQuery.getHighlightBuilder().toString())
-                .append("}");
+                .append(",");
+
+        final Pageable pageable = nativeSearchQuery.getPageable();
+
+        stringBuilder.append("\"from\":").append(pageable.getPageNumber() * pageable.getPageSize()).append(",")
+                .append("\"size\":").append(pageable.getPageSize());
+        stringBuilder.append("}");
         return stringBuilder.toString();
     }
 }
