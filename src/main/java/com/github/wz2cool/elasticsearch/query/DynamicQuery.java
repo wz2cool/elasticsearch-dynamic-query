@@ -13,13 +13,15 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 @SuppressWarnings("java:S3740")
-public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
+public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> implements IElasticsearchQuery {
 
     private final Class<T> clazz;
     private final HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
@@ -98,5 +100,20 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
 
     public QueryMode getQueryMode() {
         return queryMode;
+    }
+
+    @Override
+    public NativeSearchQuery buildNativeSearch() {
+        NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
+        if (getQueryMode() == QueryMode.QUERY) {
+            esQuery.withQuery(getFilterQuery());
+        } else {
+            esQuery.withFilter(getFilterQuery());
+        }
+        for (SortBuilder sortBuilder : getSortBuilders()) {
+            esQuery.withSort(sortBuilder);
+        }
+        esQuery.withHighlightBuilder(getHighlightBuilder());
+        return esQuery.build();
     }
 }

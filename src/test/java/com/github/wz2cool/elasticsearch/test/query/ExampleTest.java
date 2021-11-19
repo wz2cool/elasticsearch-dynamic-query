@@ -1,6 +1,5 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
-import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
@@ -8,7 +7,6 @@ import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
 import org.apache.commons.lang3.ArrayUtils;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,7 +67,7 @@ public class ExampleTest {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(TestExampleES::getId, o -> o.term(3L))
                 .orderBy(TestExampleES::getId, asc());
-        final QueryBuilder queryBuilder = query.buildQuery();
+        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
     }
@@ -90,9 +88,9 @@ public class ExampleTest {
     @Test
     public void testTermsInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
-                .and(filter(), TestExampleES::getId, o -> o.terms(3L, 6L, 9L))
+                .and(TestExampleES::getId, o -> o.terms(3L, 6L, 9L))
                 .orderBy(TestExampleES::getId, asc());
-        final QueryBuilder queryBuilder = query.buildQuery();
+        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
         assertEquals(Integer.valueOf(6), testExampleES.get(1).getP2());
@@ -103,7 +101,6 @@ public class ExampleTest {
     public void testRangeInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(TestExampleES::getId, o -> o.gt(1L).lt(3L));
-        final QueryBuilder queryBuilder = query.buildQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(2), testExampleES.get(0).getP2());
     }
@@ -114,7 +111,7 @@ public class ExampleTest {
                 .and(g -> g
                         .and(TestExampleES::getId, o -> o.gt(1L))
                         .and(TestExampleES::getId, o -> o.lt(3L)));
-        final QueryBuilder queryBuilder = query.buildQuery();
+        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(2), testExampleES.get(0).getP2());
     }
@@ -125,7 +122,7 @@ public class ExampleTest {
                 .and("jcommuzzo5", o -> o
                         .multiMatch(TestExampleES::getP1, TestExampleES::getP7)
                         .type(MultiMatchQueryBuilder.Type.MOST_FIELDS));
-        final QueryBuilder queryBuilder = query.buildQuery();
+        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(6), testExampleES.get(0).getP2());
     }
@@ -136,7 +133,7 @@ public class ExampleTest {
                 .or(TestExampleES::getId, o -> o.term(1L))
                 .or(TestExampleES::getId, o -> o.term(3L))
                 .orderBy(TestExampleES::getId, desc());
-        final QueryBuilder queryBuilder = query.buildQuery();
+        final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
         assertEquals(Integer.valueOf(1), testExampleES.get(1).getP2());

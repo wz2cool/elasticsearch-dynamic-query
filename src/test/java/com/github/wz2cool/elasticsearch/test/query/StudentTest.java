@@ -5,7 +5,6 @@ import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.ClassroomES;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.asc;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
@@ -64,8 +64,8 @@ public class StudentTest {
     @Test
     public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .andNot("", o-> o.multiMatch(StudentES::getName))
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
-        final QueryBuilder queryBuilder = query.buildQuery();
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList.size() > 0);
         for (StudentES studentES : studentESList) {
@@ -76,11 +76,11 @@ public class StudentTest {
     @Test
     public void testNested() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .highlightMapping(StudentES::getName, StudentES::setNameHit)
+                .highlightMapping(StudentES::getNameWide, StudentES::setNameWideHit)
                 .and(StudentES::getName, o -> o.term("student1"))
                 .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
-                .highlightMapping(StudentES::getName, StudentES::setNameHit)
-                .highlightMapping(StudentES::getNameWide, StudentES::setNameWideHit);
-        final QueryBuilder queryBuilder = query.buildQuery();
+                .orderBy(StudentES::getId, asc());
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertEquals(1, studentESList.size());
         assertEquals(Long.valueOf(1), studentESList.get(0).getId());

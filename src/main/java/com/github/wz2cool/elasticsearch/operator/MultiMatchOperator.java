@@ -53,6 +53,15 @@ public class MultiMatchOperator<T> {
     /**
      * See also {@link MultiMatchQueryBuilder#field(String field)}
      */
+    public MultiMatchOperator<T> field(GetStringPropertyFunction<T> getPropertyFunc, float boost) {
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        fieldMap.put(columnInfo.getColumnName(), boost);
+        return this;
+    }
+
+    /**
+     * See also {@link MultiMatchQueryBuilder#field(String field)}
+     */
     public <P1> MultiMatchOperator<T> field(GetPropertyFunction<T, P1> getP1Func, GetStringPropertyFunction<P1> getPropertyFunc) {
         return field(getP1Func, getPropertyFunc, DEFAULT_BOOST);
     }

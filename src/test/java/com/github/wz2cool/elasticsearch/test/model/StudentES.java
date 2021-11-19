@@ -11,14 +11,14 @@ public class StudentES {
     @Id
     private Long id;
     @MultiField(
-            mainField = @Field(type = FieldType.Keyword),
+            mainField = @Field(type = FieldType.Text),
             otherFields = {
                     @InnerField(suffix = "wide", type = FieldType.Text)
             }
     )
     private String name;
     @Transient
-    @Field("name.wide")
+    @Field(name = "name.wide")
     private String nameWide;
     private Integer age;
     @Transient
