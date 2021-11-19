@@ -15,8 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.asc;
+import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.mustNot;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
@@ -74,10 +76,17 @@ public class StudentTest {
 
     @Test
     public void testNested() {
+        Optional<StudentTest> optionalStudentTest = null;
+        final StudentTest studentTest = optionalStudentTest.orElse( new StudentTest());
+
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
                 .highlightMapping(StudentES::getName, StudentES::setNameHit)
                 .highlightMapping(StudentES::getNameWide, StudentES::setNameWideHit)
                 .and(StudentES::getName, o -> o.term("student1"))
+                .andTest(StudentES::getName, 2)
+                .and(StudentES::getName, o->o.term("1"))
+                .and(StudentES::getClassroom, ClassroomES::getId, o-> o.term(1L))
+                .and(g-> g.and(StudentES::getId, o-> o.term(1L)))
                 .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
                 .orderBy(StudentES::getId, asc());
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
