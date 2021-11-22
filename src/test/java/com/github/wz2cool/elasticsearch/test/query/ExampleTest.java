@@ -66,7 +66,7 @@ public class ExampleTest {
     public void testTermInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(TestExampleES::getId, o -> o.term(3L))
-                .orderBy(TestExampleES::getId, asc());
+                .orderBy(TestExampleES::getId, desc());
         final QueryBuilder queryBuilder = query.getFilterQuery();
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());

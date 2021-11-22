@@ -15,8 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.asc;
+import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.mustNot;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
@@ -64,7 +66,6 @@ public class StudentTest {
     @Test
     public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
-                .andNot("", o-> o.multiMatch(StudentES::getName))
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList.size() > 0);
