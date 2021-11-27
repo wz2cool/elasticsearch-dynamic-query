@@ -66,6 +66,7 @@ public class StudentTest {
     @Test
     public void testObject() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .select(StudentES::getId, StudentES::getClassroom)
                 .and(StudentES::getClassroom, ClassroomES::getId, o -> o.term(1L));
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList.size() > 0);

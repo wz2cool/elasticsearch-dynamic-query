@@ -7,6 +7,7 @@ import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -14,11 +15,14 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SourceFilter;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>> implements IElasticsearchQuery {
@@ -34,6 +38,25 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
     private HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
     private HighlightBuilder highlightBuilder = new HighlightBuilder();
     private final QueryMode queryMode;
+
+    private String[] selectedColumns = new String[]{};
+    private String[] ignoredColumns = new String[]{};
+
+    public String[] getSelectedColumns() {
+        return selectedColumns;
+    }
+
+    public void setSelectedColumns(String[] selectedColumns) {
+        this.selectedColumns = selectedColumns;
+    }
+
+    public String[] getIgnoredColumns() {
+        return ignoredColumns;
+    }
+
+    public void setIgnoredColumns(String[] ignoredColumns) {
+        this.ignoredColumns = ignoredColumns;
+    }
 
     private LogicPagingQuery(Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
         this(clazz, QueryMode.QUERY, pagingPropertyFunc, sortOrder, upDown);
@@ -69,6 +92,43 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
         highlightBuilder.field(columnInfo.getColumnName());
         highlightResultMapper.registerHitMapping(this.clazz, getSearchPropertyFunc, setHighLightPropertyFunc);
         return this;
+    }
+
+    @SafeVarargs
+    public final LogicPagingQuery<T> select(GetPropertyFunction<T, Object>... getPropertyFunctions) {
+        String[] newSelectProperties = new String[getPropertyFunctions.length];
+        for (int i = 0; i < getPropertyFunctions.length; i++) {
+            newSelectProperties[i] = getColumnName(getPropertyFunctions[i]);
+        }
+        this.addSelectedColumns(newSelectProperties);
+        return this;
+    }
+
+    @SafeVarargs
+    public final LogicPagingQuery<T> ignore(GetPropertyFunction<T, Object>... getPropertyFunctions) {
+        String[] newIgnoreProperties = new String[getPropertyFunctions.length];
+        for (int i = 0; i < getPropertyFunctions.length; i++) {
+            newIgnoreProperties[i] = getColumnName(getPropertyFunctions[i]);
+        }
+        this.ignoreSelectedColumns(newIgnoreProperties);
+        return this;
+    }
+
+    public void addSelectedColumns(String... newSelectedProperties) {
+        setSelectedColumns(ArrayUtils.addAll(selectedColumns, newSelectedProperties));
+    }
+
+    public void ignoreSelectedColumns(String... newIgnoreProperties) {
+        setIgnoredColumns(ArrayUtils.addAll(ignoredColumns, newIgnoreProperties));
+    }
+
+    private Optional<SourceFilter> getSourceFilter() {
+        if (ArrayUtils.isEmpty(this.selectedColumns) && ArrayUtils.isEmpty(this.ignoredColumns)) {
+            return Optional.empty();
+        }
+
+        final FetchSourceFilter fetchSourceFilter = new FetchSourceFilter(this.selectedColumns, this.ignoredColumns);
+        return Optional.of(fetchSourceFilter);
     }
 
     public QueryBuilder getQueryBuilder() {
@@ -161,6 +221,8 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
         } else {
             esQuery.withFilter(boolQueryBuilder);
         }
+        final Optional<SourceFilter> sourceFilterOptional = getSourceFilter();
+        sourceFilterOptional.ifPresent(esQuery::withSourceFilter);
         esQuery.withPageable(PageRequest.of(0, queryPageSize));
         final PropertyInfo propertyInfo = CommonsHelper.getPropertyInfo(getPagingPropertyFunc());
         final ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
