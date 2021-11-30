@@ -5,25 +5,20 @@ import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.ClassroomES;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.asc;
-import static com.github.wz2cool.elasticsearch.helper.BuilderHelper.mustNot;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = TestApplication.class)
 public class StudentTest {
@@ -31,7 +26,7 @@ public class StudentTest {
     @Resource
     private StudentEsDAO studentEsDAO;
 
-    @Before
+    @BeforeTestClass
     public void init() {
 
         mockData();
