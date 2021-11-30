@@ -1,19 +1,28 @@
 package com.github.wz2cool.elasticsearch.repository.support;
 
+import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
+import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.UpDown;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtRepository;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.ByQueryResponse;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.repository.support.ElasticsearchEntityInformation;
 import org.springframework.data.elasticsearch.repository.support.SimpleElasticsearchRepository;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,37 +69,36 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
     }
 
     @Override
-    public void deleteByDynamicQuery(DynamicQuery<T> dynamicQuery) {
-      /*  final QueryBuilder queryBuilder = dynamicQuery.getFilterQuery();
-        DeleteQuery deleteQuery = new DeleteQuery();
-        deleteQuery.setQuery(queryBuilder);
+    public ByQueryResponse deleteByDynamicQuery(DynamicQuery<T> dynamicQuery) {
         if (logger.isDebugEnabled()) {
             final NativeSearchQuery nativeSearchQuery = dynamicQuery.buildNativeSearch();
             String json = dynamicQuery.buildQueryJson(nativeSearchQuery);
             logger.debug("deleteByDynamicQuery: {}{}", System.lineSeparator(), json);
         }
-        elasticsearchOperations.delete(deleteQuery, dynamicQuery.getClazz());*/
+        return this.operations.delete(dynamicQuery.buildNativeSearch(), dynamicQuery.getClazz());
     }
 
     @Override
     public LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery) {
-     /*   NativeSearchQuery esQuery = logicPagingQuery.buildNativeSearch();
+        NativeSearchQuery esQuery = logicPagingQuery.buildNativeSearch();
         final SortOrder sortOrder = esQuery.getElasticsearchSorts().get(0).order();
         if (logger.isDebugEnabled()) {
             String json = logicPagingQuery.buildQueryJson(esQuery);
             logger.debug("selectByLogicPaging: {}{}", System.lineSeparator(), json);
         }
-        Page<T> ts;
+        List<T> dataList;
         final HighlightResultMapper highlightResultMapper = logicPagingQuery.getHighlightResultMapper();
         if (Objects.nonNull(highlightResultMapper)
                 && !CollectionUtils.isEmpty(highlightResultMapper.getPropertyMapping(logicPagingQuery.getClazz()))) {
-            ts = elasticsearchOperations.queryForPage(
-                    esQuery, logicPagingQuery.getClazz(), logicPagingQuery.getHighlightResultMapper());
+            final SearchHits<T> searchHits = this.operations.search(esQuery, logicPagingQuery.getClazz());
+            dataList = searchHits.stream()
+                    .map(x -> logicPagingQuery.getHighlightResultMapper()
+                            .mapResult(x, logicPagingQuery.getClazz())).collect(Collectors.toList());
         } else {
-            ts = elasticsearchOperations.queryForPage(
-                    esQuery, logicPagingQuery.getClazz());
+            final SearchHits<T> searchHits = this.operations.search(esQuery, logicPagingQuery.getClazz());
+            dataList = searchHits.stream()
+                    .map(SearchHit::getContent).collect(Collectors.toList());
         }
-        List<T> dataList = new ArrayList<>(ts.getContent());
         if (!logicPagingQuery.getSortOrder().equals(sortOrder)) {
             Collections.reverse(dataList);
         }
@@ -109,7 +117,6 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
         resetPagingQuery.setQueryBuilder(logicPagingQuery.getQueryBuilder());
         resetPagingQuery.setHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         resetPagingQuery.setHighlightResultMapper(logicPagingQuery.getHighlightResultMapper());
-        return selectByLogicPaging(resetPagingQuery);*/
-        return null;
+        return selectByLogicPaging(resetPagingQuery);
     }
 }
