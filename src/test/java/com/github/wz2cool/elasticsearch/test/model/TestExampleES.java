@@ -9,12 +9,12 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Document(indexName = "test_example", type = "testExample")
+@Document(indexName = "test_example")
 public class TestExampleES {
 
     @Id
     private Long id;
-    @Field(type = FieldType.Text, analyzer = "hanlp_index")
+    @Field(type = FieldType.Text)
     private String p1;
     private Integer p2;
     private Long p3;

@@ -1,20 +1,10 @@
 package com.github.wz2cool.elasticsearch.core;
 
 import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
-import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.SearchResultMapper;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
+import org.springframework.data.elasticsearch.core.SearchHit;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +15,7 @@ import java.util.function.BiConsumer;
  *
  * @author Frank
  **/
-public class HighlightResultMapper implements SearchResultMapper {
+public class HighlightResultMapper {
 
     private static final Map<Class<?>, Map<String, BiConsumer<?, String>>> CLASS_PROPERTY_MAP = new ConcurrentHashMap<>();
 
@@ -67,41 +57,25 @@ public class HighlightResultMapper implements SearchResultMapper {
         propertyMap.putIfAbsent(propertyName, setHighLightPropertyFunc);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> AggregatedPage<T> mapResults(SearchResponse searchResponse, Class<T> clazz, Pageable pageable) {
-        long totalHits = searchResponse.getHits().getTotalHits();
-        List<T> list = new ArrayList<>();
-        SearchHits hits = searchResponse.getHits();
-        if (ArrayUtils.isEmpty(hits.getHits())) {
-            return new AggregatedPageImpl<>(list, pageable, totalHits);
+    public <T> T mapResult(SearchHit<T> searchHit, Class<T> clazz) {
+        final T result = searchHit.getContent();
+        if (CLASS_SCORE_MAP.containsKey(clazz)) {
+            // 设置分数
+            BiConsumer<T, Float> setScorePropertyFunc = (BiConsumer<T, Float>) CLASS_SCORE_MAP.get(clazz);
+            setScorePropertyFunc.accept(result, searchHit.getScore());
         }
+        final Map<String, List<String>> highlightFields = searchHit.getHighlightFields();
         Map<String, BiConsumer<?, String>> propertyHitMap = CLASS_PROPERTY_MAP.get(clazz);
-        for (SearchHit searchHit : hits) {
-            T item = JSON.parseObject(searchHit.getSourceAsString(), clazz);
-            if (CLASS_SCORE_MAP.containsKey(clazz)) {
-                // 设置分数
-                BiConsumer<T, Float> setScorePropertyFunc = (BiConsumer<T, Float>) CLASS_SCORE_MAP.get(clazz);
-                setScorePropertyFunc.accept(item, searchHit.getScore());
+        for (Map.Entry<String, List<String>> stringListEntry : highlightFields.entrySet()) {
+            String hitProperty = toHitProperty(stringListEntry.getKey());
+            if (!propertyHitMap.containsKey(hitProperty)) {
+                continue;
             }
-            Map<String, HighlightField> highlightFields = searchHit.getHighlightFields();
-            for (Map.Entry<String, HighlightField> stringHighlightFieldEntry : highlightFields.entrySet()) {
-                String hitProperty = toHitProperty(stringHighlightFieldEntry.getKey());
-                if (!propertyHitMap.containsKey(hitProperty)) {
-                    continue;
-                }
-                String hitText = stringHighlightFieldEntry.getValue().fragments()[0].toString();
-                BiConsumer<T, String> setHitPropertyFunc = (BiConsumer<T, String>) propertyHitMap.get(hitProperty);
-                setHitPropertyFunc.accept(item, hitText);
-            }
-            list.add(item);
+            String hitText = stringListEntry.getValue().get(0);
+            BiConsumer<T, String> setHitPropertyFunc = (BiConsumer<T, String>) propertyHitMap.get(hitProperty);
+            setHitPropertyFunc.accept(result, hitText);
         }
-        return new AggregatedPageImpl<>(list, pageable, totalHits);
-    }
-
-    @Override
-    public <T> T mapSearchHit(SearchHit searchHit, Class<T> aClass) {
-        return null;
+        return result;
     }
 
     private String toHitProperty(String esHitProperty) {

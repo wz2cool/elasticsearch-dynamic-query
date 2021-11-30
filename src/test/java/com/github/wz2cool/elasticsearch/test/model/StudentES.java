@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.*;
 
-@Document(indexName = "test_student", type = "testStudent")
+@Document(indexName = "test_student")
 public class StudentES {
     @Transient
     private float score;
