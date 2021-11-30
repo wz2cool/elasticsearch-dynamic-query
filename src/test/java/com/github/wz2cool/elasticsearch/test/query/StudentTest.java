@@ -87,4 +87,24 @@ public class StudentTest {
         assertEquals(1, studentESList.size());
         assertEquals(Long.valueOf(1), studentESList.get(0).getId());
     }
+
+    @Test
+    public void testAdd() {
+        StudentES studentES = new StudentES();
+        studentES.setId(Long.MAX_VALUE);
+        studentES.setName("student" + Long.MAX_VALUE);
+        studentES.setAge(10);
+        studentEsDAO.save(studentES);
+
+        final DynamicQuery<StudentES> studentESDynamicQuery = DynamicQuery.createQuery(StudentES.class)
+                .and(StudentES::getId, o -> o.term(Long.MAX_VALUE));
+
+        List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(studentESDynamicQuery);
+        assertEquals(1, studentESList.size());
+
+        studentEsDAO.deleteByDynamicQuery(studentESDynamicQuery);
+
+        studentESList = studentEsDAO.selectByDynamicQuery(studentESDynamicQuery);
+        assertEquals(0, studentESList.size());
+    }
 }
