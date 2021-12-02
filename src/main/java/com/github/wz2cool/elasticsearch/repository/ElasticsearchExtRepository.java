@@ -23,7 +23,7 @@ public interface ElasticsearchExtRepository<T, I> extends ElasticsearchRepositor
      *
      * @param dynamicQuery dynamic query
      */
-    ByQueryResponse deleteByDynamicQuery(DynamicQuery<T> dynamicQuery);
+    void deleteByDynamicQuery(DynamicQuery<T> dynamicQuery);
 
     List<T> selectByDynamicQuery(DynamicQuery<T> dynamicQuery);
 

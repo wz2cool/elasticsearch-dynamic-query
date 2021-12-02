@@ -69,13 +69,13 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
     }
 
     @Override
-    public ByQueryResponse deleteByDynamicQuery(DynamicQuery<T> dynamicQuery) {
+    public void deleteByDynamicQuery(DynamicQuery<T> dynamicQuery) {
         if (logger.isDebugEnabled()) {
             final NativeSearchQuery nativeSearchQuery = dynamicQuery.buildNativeSearch();
             String json = dynamicQuery.buildQueryJson(nativeSearchQuery);
             logger.debug("deleteByDynamicQuery: {}{}", System.lineSeparator(), json);
         }
-        return this.operations.delete(dynamicQuery.buildNativeSearch(), dynamicQuery.getClazz());
+        this.operations.delete(dynamicQuery.buildNativeSearch(), dynamicQuery.getClazz());
     }
 
     @Override
