@@ -3,6 +3,7 @@ package com.github.wz2cool.elasticsearch.repository;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
+import org.springframework.data.elasticsearch.core.query.ByQueryResponse;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -22,7 +23,7 @@ public interface ElasticsearchExtRepository<T, I> extends ElasticsearchRepositor
      *
      * @param dynamicQuery dynamic query
      */
-    void deleteByDynamicQuery(DynamicQuery<T> dynamicQuery);
+    ByQueryResponse deleteByDynamicQuery(DynamicQuery<T> dynamicQuery);
 
     List<T> selectByDynamicQuery(DynamicQuery<T> dynamicQuery);
 

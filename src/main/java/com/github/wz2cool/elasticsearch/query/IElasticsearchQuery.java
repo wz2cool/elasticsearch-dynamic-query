@@ -42,8 +42,10 @@ public interface IElasticsearchQuery {
 
         final Pageable pageable = nativeSearchQuery.getPageable();
 
-        stringBuilder.append("\"from\":").append(pageable.getPageNumber() * pageable.getPageSize()).append(",")
-                .append("\"size\":").append(pageable.getPageSize());
+        if (pageable != Pageable.unpaged()) {
+            stringBuilder.append("\"from\":").append(pageable.getPageNumber() * pageable.getPageSize()).append(",")
+                    .append("\"size\":").append(pageable.getPageSize());
+        }
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
