@@ -8,6 +8,7 @@ import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -38,7 +39,7 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
     private HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
     private HighlightBuilder highlightBuilder = new HighlightBuilder();
     private final QueryMode queryMode;
-
+    private final String route;
     private String[] selectedColumns = new String[]{};
     private String[] ignoredColumns = new String[]{};
 
@@ -58,26 +59,37 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
         this.ignoredColumns = ignoredColumns;
     }
 
-    private LogicPagingQuery(Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
-        this(clazz, QueryMode.QUERY, pagingPropertyFunc, sortOrder, upDown);
+    private LogicPagingQuery(Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown, String route) {
+        this(clazz, QueryMode.QUERY, pagingPropertyFunc, sortOrder, upDown, route);
     }
 
-    private LogicPagingQuery(Class<T> clazz, QueryMode queryMode, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
+    private LogicPagingQuery(Class<T> clazz, QueryMode queryMode, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown, String route) {
         this.clazz = clazz;
         this.upDown = upDown;
         this.sortOrder = sortOrder;
         this.pagingPropertyFunc = pagingPropertyFunc;
         this.queryMode = queryMode;
+        this.route = route;
     }
 
     public static <T> LogicPagingQuery<T> createQuery(
             Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
-        return new LogicPagingQuery<>(clazz, pagingPropertyFunc, sortOrder, upDown);
+        return new LogicPagingQuery<>(clazz, pagingPropertyFunc, sortOrder, upDown, null);
+    }
+
+    public static <T> LogicPagingQuery<T> createQuery(
+            Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown, String route) {
+        return new LogicPagingQuery<>(clazz, pagingPropertyFunc, sortOrder, upDown, route);
     }
 
     public static <T> LogicPagingQuery<T> createQuery(
             Class<T> clazz, QueryMode queryMode, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
-        return new LogicPagingQuery<>(clazz, queryMode, pagingPropertyFunc, sortOrder, upDown);
+        return new LogicPagingQuery<>(clazz, queryMode, pagingPropertyFunc, sortOrder, upDown, null);
+    }
+
+    public static <T> LogicPagingQuery<T> createQuery(
+            Class<T> clazz, QueryMode queryMode, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown, String route) {
+        return new LogicPagingQuery<>(clazz, queryMode, pagingPropertyFunc, sortOrder, upDown, route);
     }
 
     public LogicPagingQuery<T> scoreMapping(BiConsumer<T, Float> setScorePropertyFunc) {
@@ -216,6 +228,9 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
             boolQueryBuilder.must(mapEntry.getValue());
         }
         NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
+        if (StringUtils.isNotBlank(route)) {
+            esQuery.withRoute(route);
+        }
         if (getQueryMode() == QueryMode.QUERY) {
             esQuery.withQuery(boolQueryBuilder);
         } else {
