@@ -36,6 +36,7 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
     private int pageSize = 10;
     private Long lastStartPageId;
     private Long lastEndPageId;
+    private boolean upAutomaticSupplement = true;
     private HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
     private HighlightBuilder highlightBuilder = new HighlightBuilder();
     private final QueryMode queryMode;
@@ -209,6 +210,18 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
 
     public QueryMode getQueryMode() {
         return queryMode;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public boolean isUpAutomaticSupplement() {
+        return upAutomaticSupplement;
+    }
+
+    public void setUpAutomaticSupplement(boolean upAutomaticSupplement) {
+        this.upAutomaticSupplement = upAutomaticSupplement;
     }
 
     @Override

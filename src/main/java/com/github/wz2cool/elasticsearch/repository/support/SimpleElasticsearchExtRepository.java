@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.ByQueryResponse;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.repository.support.ElasticsearchEntityInformation;
 import org.springframework.data.elasticsearch.repository.support.SimpleElasticsearchRepository;
@@ -103,8 +102,8 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
             Collections.reverse(dataList);
         }
         Optional<LogicPagingResult<T>> logicPagingResultOptional = LogicPagingHelper.getPagingResult(
-                logicPagingQuery.getPagingPropertyFunc(),
-                dataList, logicPagingQuery.getPageSize(), logicPagingQuery.getUpDown());
+                logicPagingQuery.getPagingPropertyFunc(), dataList, logicPagingQuery.getPageSize(),
+                logicPagingQuery.getUpDown(), logicPagingQuery.isUpAutomaticSupplement());
         if (logicPagingResultOptional.isPresent()) {
             return logicPagingResultOptional.get();
         }

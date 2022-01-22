@@ -2,10 +2,7 @@ package com.github.wz2cool.elasticsearch.query;
 
 import com.github.wz2cool.elasticsearch.lambda.GetArrayPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
-import com.github.wz2cool.elasticsearch.operator.ArrayFilterOperators;
-import com.github.wz2cool.elasticsearch.operator.IArrayFilterOperator;
-import com.github.wz2cool.elasticsearch.operator.IFilterOperator;
-import com.github.wz2cool.elasticsearch.operator.SingleFilterOperators;
+import com.github.wz2cool.elasticsearch.operator.*;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.function.Function;
@@ -110,6 +107,18 @@ public class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndFi
         return (S) this;
     }
 
+    public S or(String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        return this.or(true, value, operatorFunc);
+    }
+
+    public S or(boolean enable, String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
+        if (enable) {
+            MultiMatchOperator<T> operator = (MultiMatchOperator) operatorFunc.apply(this.getMultiMatchOperators());
+            QueryBuilder queryBuilder = operator.buildQuery(value);
+            booleanQueryBuilder.should(queryBuilder);
+        }
+        return (S) this;
+    }
     /// endregion
 
     /// region custom
