@@ -72,7 +72,7 @@ public final class LogicPagingHelper {
     }
 
     public static <T> Optional<LogicPagingResult<T>> getPagingResult(
-            GetLongPropertyFunction<T> pagingPropertyFunc, List<T> dataList, int pageSize, UpDown upDown) {
+            GetLongPropertyFunction<T> pagingPropertyFunc, List<T> dataList, int pageSize, UpDown upDown, boolean upAutomaticSupplement) {
         int dataSize = dataList.size();
         boolean hasNextPage;
         boolean hasPreviousPage;
@@ -83,16 +83,16 @@ public final class LogicPagingHelper {
             hasNextPage = dataSize > pageSize;
             hasPreviousPage = true;
         } else {
-            if (dataSize < pageSize) {
+            //当upAutomaticSupplement为true,向上翻页的时候,数据不够的时候会再次查询数据补全
+            if (upAutomaticSupplement && dataSize < pageSize) {
                 return Optional.empty();
             }
             if (dataSize > pageSize) {
                 hasPreviousPage = true;
-                hasNextPage = true;
             } else {
                 hasPreviousPage = false;
-                hasNextPage = true;
             }
+            hasNextPage = true;
         }
         Long startPageId = 0L;
         Long endPageId = 0L;
