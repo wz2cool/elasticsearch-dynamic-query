@@ -1,10 +1,14 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
+import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.UpDown;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
+import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.ClassroomES;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -101,5 +105,49 @@ public class StudentTest {
 
         studentESList = studentEsDAO.selectByDynamicQuery(studentESDynamicQuery);
         assertEquals(0, studentESList.size());
+    }
+
+    @Test
+    public void testAddMultiText() {
+        String[] arr = {"中国恒大", "浙江上海江苏", "电子地产矿泉水"};
+        for (long i = 1; i <= 100; i++) {
+            StudentES studentES = new StudentES();
+            studentES.setId(i);
+            studentES.setName(arr[(int) (i % 3)] + i);
+            studentEsDAO.save(studentES);
+        }
+    }
+
+    @Test
+    public void testOrMulti() {
+        LogicPagingQuery<StudentES> query = LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP);
+        LogicPagingQuery<StudentES> or = query.or("中国", x -> x.multiMatch(StudentES::getName)).or("上海", x -> x.multiMatch(StudentES::getName));
+        LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
+        List<StudentES> list = studentESLogicPagingResult.getList();
+        System.out.println(list.size());
+    }
+
+    @Test
+    public void testOrAndMulti() {
+        LogicPagingQuery<StudentES> query = LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP);
+        query.or(x -> x.and("中国", y -> y.multiMatch(StudentES::getName)))
+                .or(x -> x.and("上海", y -> y.multiMatch(StudentES::getName)));
+        query.setPageSize(100);
+        LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
+        List<StudentES> list = studentESLogicPagingResult.getList();
+        System.out.println(list.size());
+    }
+
+    @Test
+    public void testOrMultiSupplement() {
+        LogicPagingQuery<StudentES> query = LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP);
+        query.or(x -> x.and("中国", y -> y.multiMatch(StudentES::getName)))
+                .or(x -> x.and("上海", y -> y.multiMatch(StudentES::getName)));
+        query.setUpAutomaticSupplement(false);
+        query.setLastStartPageId(0L);
+        query.setPageSize(100);
+        LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
+        List<StudentES> list = studentESLogicPagingResult.getList();
+        System.out.println(list.size());
     }
 }
