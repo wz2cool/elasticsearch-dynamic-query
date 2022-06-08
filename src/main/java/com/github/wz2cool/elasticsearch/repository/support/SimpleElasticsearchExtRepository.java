@@ -3,6 +3,7 @@ package com.github.wz2cool.elasticsearch.repository.support;
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.RowBounds;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
@@ -117,5 +118,38 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
         resetPagingQuery.setHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         resetPagingQuery.setHighlightResultMapper(logicPagingQuery.getHighlightResultMapper());
         return selectByLogicPaging(resetPagingQuery);
+    }
+
+    /**
+     * 左开右闭 例如(0,20]查询的是1-20
+     *
+     * @param dynamicQuery 查询sql
+     * @param rowBounds    分页rouBounds
+     * @return java.util.List<T> 返回集合
+     * @author dengmeiluan
+     * @date 2022/6/8 18:00
+     */
+    @Override
+    public List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds) {
+        int offset = rowBounds.getOffset();
+        int limit = rowBounds.getLimit();
+        int pageSize = limit - offset;
+        if (pageSize <= 0) {
+            return Collections.emptyList();
+        }
+        int modularResidueValue = offset % pageSize;
+        //如果模等于0则代表直接代入分页参数即可
+        if (modularResidueValue == 0) {
+            return selectByDynamicQuery(dynamicQuery, offset / pageSize, pageSize);
+        } else {
+            //如果分页长度大于偏移长度,直接从第一页查询,然后分页长度扩大等于偏移的长度,查询结果跳过偏移长度
+            if (pageSize > offset) {
+                return selectByDynamicQuery(dynamicQuery, 0, pageSize + offset).stream().skip(offset).collect(Collectors.toList());
+                //如果分页长度小于偏移长度,分页长度扩大等于摸的长度,分页页码重新计算,查询结果只取入参的长度
+            } else {
+                int finalPageSize = pageSize + modularResidueValue;
+                return selectByDynamicQuery(dynamicQuery, offset / finalPageSize, finalPageSize).stream().limit(pageSize).collect(Collectors.toList());
+            }
+        }
     }
 }

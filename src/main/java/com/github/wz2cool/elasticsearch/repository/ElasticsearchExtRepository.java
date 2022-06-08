@@ -1,9 +1,9 @@
 package com.github.wz2cool.elasticsearch.repository;
 
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.RowBounds;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
-import org.springframework.data.elasticsearch.core.query.ByQueryResponse;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -38,4 +38,9 @@ public interface ElasticsearchExtRepository<T, I> extends ElasticsearchRepositor
      * @return logic paging result
      */
     LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery);
+
+    /**
+     * 类似mysql的 limit
+     */
+    List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds);
 }
