@@ -121,7 +121,7 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
     }
 
     /**
-     * 左开右闭 例如(0,20]查询的是1-20
+     * 类似mysql的 limit a,b 从第a条开始截取b条
      *
      * @param dynamicQuery 查询sql
      * @param rowBounds    分页rouBounds
@@ -133,22 +133,21 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
     public List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds) {
         int offset = rowBounds.getOffset();
         int limit = rowBounds.getLimit();
-        int pageSize = limit - offset;
-        if (pageSize <= 0) {
+        if (limit <= 0) {
             return Collections.emptyList();
         }
-        int modularResidueValue = offset % pageSize;
+        int modularResidueValue = offset % limit;
         //如果模等于0则代表直接代入分页参数即可
         if (modularResidueValue == 0) {
-            return selectByDynamicQuery(dynamicQuery, offset / pageSize, pageSize);
+            return selectByDynamicQuery(dynamicQuery, offset / limit, limit);
         } else {
-            //如果分页长度大于偏移长度,直接从第一页查询,然后分页长度扩大等于偏移的长度,查询结果跳过偏移长度
-            if (pageSize > offset) {
-                return selectByDynamicQuery(dynamicQuery, 0, pageSize + offset).stream().skip(offset).collect(Collectors.toList());
-                //如果分页长度小于偏移长度,分页长度扩大等于摸的长度,分页页码重新计算,查询结果只取入参的长度
+            //如果截取长度大于偏移长度,直接从第一页查询,然后分页长度扩大等于偏移的长度,查询结果跳过偏移长度
+            if (limit > offset) {
+                return selectByDynamicQuery(dynamicQuery, 0, limit + offset).stream().skip(offset).collect(Collectors.toList());
+                //如果分页长度小于偏移长度,分页长度扩大等于摸的长度,分页页码重新计算,查询结果跳过摸数
             } else {
-                int finalPageSize = pageSize + modularResidueValue;
-                return selectByDynamicQuery(dynamicQuery, offset / finalPageSize, finalPageSize).stream().limit(pageSize).collect(Collectors.toList());
+                int finalPageSize = limit + modularResidueValue;
+                return selectByDynamicQuery(dynamicQuery, offset / finalPageSize, finalPageSize).stream().skip(modularResidueValue).collect(Collectors.toList());
             }
         }
     }
