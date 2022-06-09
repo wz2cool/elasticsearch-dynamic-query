@@ -3,6 +3,7 @@ package com.github.wz2cool.elasticsearch.repository.support;
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.OffsetLimitPageable;
 import com.github.wz2cool.elasticsearch.model.RowBounds;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
@@ -12,6 +13,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -45,18 +47,8 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
 
     @Override
     public List<T> selectByDynamicQuery(DynamicQuery<T> dynamicQuery, int page, int pageSize) {
-        NativeSearchQuery esQuery = dynamicQuery.buildNativeSearch();
-        final PageRequest pageRequest = PageRequest.of(page, pageSize);
-        esQuery.setPageable(pageRequest);
-
-        if (logger.isDebugEnabled()) {
-            String json = dynamicQuery.buildQueryJson(esQuery);
-            logger.debug("selectByDynamicQuery: {}{}", System.lineSeparator(), json);
-        }
-        final SearchHits<T> searchHits = this.operations.search(esQuery, dynamicQuery.getClazz());
-        return searchHits.stream()
-                .map(x -> dynamicQuery.getHighlightResultMapper()
-                        .mapResult(x, dynamicQuery.getClazz())).collect(Collectors.toList());
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        return selectByPageableDynamicQuery(dynamicQuery, pageRequest);
     }
 
     @Override
@@ -131,24 +123,20 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
      */
     @Override
     public List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds) {
-        int offset = rowBounds.getOffset();
-        int limit = rowBounds.getLimit();
-        if (limit <= 0) {
-            return Collections.emptyList();
+        OffsetLimitPageable offsetLimitPageable = OffsetLimitPageable.of(rowBounds.getOffset(), 0, rowBounds.getLimit());
+        return selectByPageableDynamicQuery(dynamicQuery, offsetLimitPageable);
+    }
+
+    private List<T> selectByPageableDynamicQuery(DynamicQuery<T> dynamicQuery, Pageable pageable) {
+        NativeSearchQuery esQuery = dynamicQuery.buildNativeSearch();
+        esQuery.setPageable(pageable);
+        if (logger.isDebugEnabled()) {
+            String json = dynamicQuery.buildQueryJson(esQuery);
+            logger.debug("selectByDynamicQuery: {}{}", System.lineSeparator(), json);
         }
-        int modularResidueValue = offset % limit;
-        //如果模等于0则代表直接代入分页参数即可
-        if (modularResidueValue == 0) {
-            return selectByDynamicQuery(dynamicQuery, offset / limit, limit);
-        } else {
-            //如果截取长度大于偏移长度,直接从第一页查询,然后分页长度扩大等于偏移的长度,查询结果跳过偏移长度
-            if (limit > offset) {
-                return selectByDynamicQuery(dynamicQuery, 0, limit + offset).stream().skip(offset).collect(Collectors.toList());
-                //如果分页长度小于偏移长度,分页长度扩大等于摸的长度,分页页码重新计算,查询结果跳过摸数
-            } else {
-                int finalPageSize = limit + modularResidueValue;
-                return selectByDynamicQuery(dynamicQuery, offset / finalPageSize, finalPageSize).stream().skip(modularResidueValue).collect(Collectors.toList());
-            }
-        }
+        final SearchHits<T> searchHits = this.operations.search(esQuery, dynamicQuery.getClazz());
+        return searchHits.stream()
+                .map(x -> dynamicQuery.getHighlightResultMapper()
+                        .mapResult(x, dynamicQuery.getClazz())).collect(Collectors.toList());
     }
 }
