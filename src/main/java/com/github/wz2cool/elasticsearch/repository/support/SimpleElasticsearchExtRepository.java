@@ -3,6 +3,8 @@ package com.github.wz2cool.elasticsearch.repository.support;
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.OffsetLimitPageable;
+import com.github.wz2cool.elasticsearch.model.RowBounds;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
@@ -11,6 +13,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -44,18 +47,8 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
 
     @Override
     public List<T> selectByDynamicQuery(DynamicQuery<T> dynamicQuery, int page, int pageSize) {
-        NativeSearchQuery esQuery = dynamicQuery.buildNativeSearch();
-        final PageRequest pageRequest = PageRequest.of(page, pageSize);
-        esQuery.setPageable(pageRequest);
-
-        if (logger.isDebugEnabled()) {
-            String json = dynamicQuery.buildQueryJson(esQuery);
-            logger.debug("selectByDynamicQuery: {}{}", System.lineSeparator(), json);
-        }
-        final SearchHits<T> searchHits = this.operations.search(esQuery, dynamicQuery.getClazz());
-        return searchHits.stream()
-                .map(x -> dynamicQuery.getHighlightResultMapper()
-                        .mapResult(x, dynamicQuery.getClazz())).collect(Collectors.toList());
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        return selectByPageableDynamicQuery(dynamicQuery, pageRequest);
     }
 
     @Override
@@ -117,5 +110,33 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
         resetPagingQuery.setHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         resetPagingQuery.setHighlightResultMapper(logicPagingQuery.getHighlightResultMapper());
         return selectByLogicPaging(resetPagingQuery);
+    }
+
+    /**
+     * 类似mysql的 limit a,b 从第a条开始截取b条
+     *
+     * @param dynamicQuery 查询sql
+     * @param rowBounds    分页rouBounds
+     * @return java.util.List<T> 返回集合
+     * @author dengmeiluan
+     * @date 2022/6/8 18:00
+     */
+    @Override
+    public List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds) {
+        OffsetLimitPageable offsetLimitPageable = OffsetLimitPageable.of(rowBounds.getOffset(), 0, rowBounds.getLimit());
+        return selectByPageableDynamicQuery(dynamicQuery, offsetLimitPageable);
+    }
+
+    private List<T> selectByPageableDynamicQuery(DynamicQuery<T> dynamicQuery, Pageable pageable) {
+        NativeSearchQuery esQuery = dynamicQuery.buildNativeSearch();
+        esQuery.setPageable(pageable);
+        if (logger.isDebugEnabled()) {
+            String json = dynamicQuery.buildQueryJson(esQuery);
+            logger.debug("selectByDynamicQuery: {}{}", System.lineSeparator(), json);
+        }
+        final SearchHits<T> searchHits = this.operations.search(esQuery, dynamicQuery.getClazz());
+        return searchHits.stream()
+                .map(x -> dynamicQuery.getHighlightResultMapper()
+                        .mapResult(x, dynamicQuery.getClazz())).collect(Collectors.toList());
     }
 }
