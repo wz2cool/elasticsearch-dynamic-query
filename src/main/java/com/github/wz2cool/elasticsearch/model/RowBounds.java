@@ -4,7 +4,6 @@ package com.github.wz2cool.elasticsearch.model;
  * RowBounds
  *
  * @author dengmeiluan
- * @date 2022/6/8 16:30
  */
 public class RowBounds {
 

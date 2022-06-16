@@ -119,7 +119,6 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
      * @param rowBounds    分页rouBounds
      * @return java.util.List<T> 返回集合
      * @author dengmeiluan
-     * @date 2022/6/8 18:00
      */
     @Override
     public List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds) {
