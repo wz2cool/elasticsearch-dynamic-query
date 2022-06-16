@@ -112,14 +112,6 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
         return selectByLogicPaging(resetPagingQuery);
     }
 
-    /**
-     * 类似mysql的 limit a,b 从第a条开始截取b条
-     *
-     * @param dynamicQuery 查询sql
-     * @param rowBounds    分页rouBounds
-     * @return java.util.List<T> 返回集合
-     * @author dengmeiluan
-     */
     @Override
     public List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds) {
         OffsetLimitPageable offsetLimitPageable = OffsetLimitPageable.of(rowBounds.getOffset(), 0, rowBounds.getLimit());

@@ -39,8 +39,5 @@ public interface ElasticsearchExtRepository<T, I> extends ElasticsearchRepositor
      */
     LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery);
 
-    /**
-     * 类似mysql的 limit
-     */
     List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds);
 }
