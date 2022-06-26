@@ -12,8 +12,8 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class StudentTest {
     @Resource
     private StudentEsDAO studentEsDAO;
 
-    @BeforeTestClass
+    @PostConstruct
     public void init() {
 
         mockData();

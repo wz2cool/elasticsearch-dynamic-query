@@ -10,8 +10,8 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -30,9 +30,8 @@ public class ExampleTest {
     @Resource
     private TestExampleEsDAO testExampleEsDAO;
 
-    @BeforeTestClass
+    @PostConstruct
     public void init() {
-
         mockData();
     }
 
