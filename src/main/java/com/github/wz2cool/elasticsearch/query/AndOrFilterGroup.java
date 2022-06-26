@@ -113,7 +113,7 @@ public class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndFi
 
     public S or(boolean enable, String value, Function<MultiMatchOperators<T>, MultiMatchOperator<T>> operatorFunc) {
         if (enable) {
-            MultiMatchOperator<T> operator = (MultiMatchOperator) operatorFunc.apply(this.getMultiMatchOperators());
+            MultiMatchOperator<T> operator = operatorFunc.apply(this.getMultiMatchOperators());
             QueryBuilder queryBuilder = operator.buildQuery(value);
             booleanQueryBuilder.should(queryBuilder);
         }
@@ -200,5 +200,6 @@ public class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndFi
     }
 
     /// endregion
+
 
 }
