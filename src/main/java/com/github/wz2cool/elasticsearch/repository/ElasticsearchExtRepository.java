@@ -1,9 +1,11 @@
 package com.github.wz2cool.elasticsearch.repository;
 
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.NormPagingResult;
 import com.github.wz2cool.elasticsearch.model.RowBounds;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
+import com.github.wz2cool.elasticsearch.query.NormPagingQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -40,4 +42,6 @@ public interface ElasticsearchExtRepository<T, I> extends ElasticsearchRepositor
     LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery);
 
     List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds);
+
+    NormPagingResult<T> selectByNormalPaging(NormPagingQuery<T> normPagingQuery);
 }

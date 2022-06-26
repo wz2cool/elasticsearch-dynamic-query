@@ -172,4 +172,8 @@ public abstract class BaseDynamicQuery<T, S extends BaseFilterGroup<T, S>> exten
         final FetchSourceFilter fetchSourceFilter = new FetchSourceFilter(this.selectedColumns, this.ignoredColumns);
         return Optional.of(fetchSourceFilter);
     }
+
+    public void setClazz(Class<T> clazz) {
+        this.clazz = clazz;
+    }
 }
