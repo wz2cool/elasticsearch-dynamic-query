@@ -38,22 +38,6 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> impleme
     private String[] selectedColumns = new String[]{};
     private String[] ignoredColumns = new String[]{};
 
-    public String[] getSelectedColumns() {
-        return selectedColumns;
-    }
-
-    public void setSelectedColumns(String[] selectedColumns) {
-        this.selectedColumns = selectedColumns;
-    }
-
-    public String[] getIgnoredColumns() {
-        return ignoredColumns;
-    }
-
-    public void setIgnoredColumns(String[] ignoredColumns) {
-        this.ignoredColumns = ignoredColumns;
-    }
-
     public DynamicQuery(Class<T> clazz, QueryMode queryMode, String route) {
         this.clazz = clazz;
         this.queryMode = queryMode;
@@ -74,6 +58,22 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> impleme
 
     public static <T> DynamicQuery<T> createQuery(Class<T> clazz, QueryMode queryMode, String route) {
         return new DynamicQuery<>(clazz, queryMode, route);
+    }
+
+    public String[] getSelectedColumns() {
+        return selectedColumns;
+    }
+
+    public void setSelectedColumns(String[] selectedColumns) {
+        this.selectedColumns = selectedColumns;
+    }
+
+    public String[] getIgnoredColumns() {
+        return ignoredColumns;
+    }
+
+    public void setIgnoredColumns(String[] ignoredColumns) {
+        this.ignoredColumns = ignoredColumns;
     }
 
     public DynamicQuery<T> scoreMapping(BiConsumer<T, Float> setScorePropertyFunc) {
@@ -98,6 +98,17 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> impleme
         if (enable) {
             final ScoreSortBuilder order = new ScoreSortBuilder().order(sortOrder);
             this.sortBuilders.add(order);
+        }
+        return this;
+    }
+
+    public DynamicQuery<T> orderBy(FieldSortBuilder sortBuilder) {
+        return this.orderBy(true, sortBuilder);
+    }
+
+    public DynamicQuery<T> orderBy(boolean enable, FieldSortBuilder sortBuilder) {
+        if (enable) {
+            this.sortBuilders.add(sortBuilder);
         }
         return this;
     }
