@@ -1,9 +1,11 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.NormPagingResult;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
+import com.github.wz2cool.elasticsearch.query.NormPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.ClassroomES;
@@ -12,8 +14,8 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,7 @@ public class StudentTest {
     @Resource
     private StudentEsDAO studentEsDAO;
 
-    @BeforeTestClass
+    @PostConstruct
     public void init() {
 
         mockData();
@@ -60,6 +62,18 @@ public class StudentTest {
             data.add(studentES);
         }
         studentEsDAO.save(data.toArray(new StudentES[0]));
+    }
+
+    @Test
+    public void testNormPaging() {
+        NormPagingQuery<StudentES> query = NormPagingQuery.createQuery(StudentES.class, 1, 5)
+                .highlightMapping(StudentES::getName, StudentES::setNameHit)
+                .highlightMapping(StudentES::getNameWide, StudentES::setNameWideHit)
+                .and(StudentES::getName, o -> o.term("student1"))
+                .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
+                .orderBy(StudentES::getId, asc());
+        final NormPagingResult<StudentES> studentESNormPagingResult = studentEsDAO.selectByNormPaging(query);
+        assertTrue(studentESNormPagingResult.getList().size() > 1);
     }
 
     @Test

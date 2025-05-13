@@ -1,6 +1,8 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
+import com.github.wz2cool.elasticsearch.model.NormPagingResult;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
+import com.github.wz2cool.elasticsearch.query.NormPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
@@ -10,8 +12,8 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -30,9 +32,8 @@ public class ExampleTest {
     @Resource
     private TestExampleEsDAO testExampleEsDAO;
 
-    @BeforeTestClass
+    @PostConstruct
     public void init() {
-
         mockData();
     }
 
@@ -55,9 +56,18 @@ public class ExampleTest {
         data.add(new TestExampleES(15L, "cfrankcome@virginia.edu", 15, 150L, 15.1f, 2.6d, Date.valueOf("2020-10-16"), "Zorina", BigDecimal.valueOf(2.5), new Integer[]{7, 8, 9}));
         data.add(new TestExampleES(16L, "gokeyg@who.int", 16, 160L, 1.1f, 16.1d, Date.valueOf("2021-04-26"), "Dore", BigDecimal.valueOf(2.6), new Integer[]{7, 8, 9}));
         data.add(new TestExampleES(17L, "nabryh@privacy.gov.au", 17, 170L, 17.1f, 17.1d, Date.valueOf("2020-09-10"), "Abbott", BigDecimal.valueOf(2.7), new Integer[]{7, 8, 9}));
-        data.add(new TestExampleES(19L, "wsimoesi@so-net.ne.jp", 18, 180L, 18.1f, 18.1d, Date.valueOf("2020-08-16"), "Eugenius", BigDecimal.valueOf(2.8), new Integer[]{7, 8, 9}));
-        data.add(new TestExampleES(20L, "maltamiranoj@blogs.com", 19, 190L, 19.1f, 19.1d, Date.valueOf("2020-07-09"), "Benetta", BigDecimal.valueOf(2.9), new Integer[]{7, 8, 9}));
+        data.add(new TestExampleES(18L, "nabryh@privacy.gov.au", 18, 170L, 17.1f, 17.1d, Date.valueOf("2020-09-10"), "Abbott", BigDecimal.valueOf(2.7), new Integer[]{7, 8, 9}));
+        data.add(new TestExampleES(19L, "wsimoesi@so-net.ne.jp", 19, 180L, 18.1f, 18.1d, Date.valueOf("2020-08-16"), "Eugenius", BigDecimal.valueOf(2.8), new Integer[]{7, 8, 9}));
+        data.add(new TestExampleES(20L, "maltamiranoj@blogs.com", 20, 190L, 19.1f, 19.1d, Date.valueOf("2020-07-09"), "Benetta", BigDecimal.valueOf(2.9), new Integer[]{7, 8, 9}));
         testExampleEsDAO.save(data);
+    }
+
+    @Test
+    public void testSelectNormPaging() {
+        NormPagingQuery<TestExampleES> query = NormPagingQuery.createQuery(TestExampleES.class, 2, 5)
+                .and(TestExampleES::getId, o -> o.gt(0L));
+        final NormPagingResult<TestExampleES> testExampleESNormPagingResult = testExampleEsDAO.selectByNormPaging(query);
+        assertEquals(Long.valueOf(19), testExampleESNormPagingResult.getTotal());
     }
 
     @Test

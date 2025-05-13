@@ -2,12 +2,10 @@ package com.github.wz2cool.elasticsearch.repository.support;
 
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
-import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
-import com.github.wz2cool.elasticsearch.model.OffsetLimitPageable;
-import com.github.wz2cool.elasticsearch.model.RowBounds;
-import com.github.wz2cool.elasticsearch.model.UpDown;
+import com.github.wz2cool.elasticsearch.model.*;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
+import com.github.wz2cool.elasticsearch.query.NormPagingQuery;
 import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtRepository;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -116,6 +114,38 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
     public List<T> selectRowBoundsByDynamicQuery(DynamicQuery<T> dynamicQuery, RowBounds rowBounds) {
         OffsetLimitPageable offsetLimitPageable = OffsetLimitPageable.of(rowBounds.getOffset(), 0, rowBounds.getLimit());
         return selectByPageableDynamicQuery(dynamicQuery, offsetLimitPageable);
+    }
+
+    @Override
+    public NormPagingResult<T> selectByNormalPaging(NormPagingQuery<T> normPagingQuery) {
+        NormPagingResult<T> result = new NormPagingResult<>();
+        int pageNum = normPagingQuery.getPageNum() < 1 ? 1 : normPagingQuery.getPageNum();
+        int pageSize = normPagingQuery.getPageSize();
+        int queryPageSize = pageSize + 1;
+        int offset = (pageNum - 1) * pageSize;
+        OffsetLimitPageable offsetLimitPageable = OffsetLimitPageable.of(offset, 0, queryPageSize);
+        final NativeSearchQuery esQuery = normPagingQuery.buildNativeSearch();
+        esQuery.setPageable(offsetLimitPageable);
+        final SearchHits<T> searchHits = this.operations.search(esQuery, normPagingQuery.getClazz());
+        final long totalCount = searchHits.getTotalHits();
+        final List<T> dataList = searchHits.stream()
+                .map(x -> normPagingQuery.getHighlightResultMapper()
+                        .mapResult(x, normPagingQuery.getClazz())).collect(Collectors.toList());
+        int pages = (int) Math.ceil((double) totalCount / pageSize);
+        result.setTotal(totalCount);
+        result.setPages(pages);
+        boolean hasNext = dataList.size() > pageSize;
+        boolean hasPre = pageNum > 1;
+        result.setHasNextPage(hasNext);
+        result.setHasPreviousPage(hasPre);
+        if (dataList.size() > pageSize) {
+            result.setList(dataList.subList(0, pageSize));
+        } else {
+            result.setList(dataList);
+        }
+        result.setPageNum(pageNum);
+        result.setPageSize(normPagingQuery.getPageSize());
+        return result;
     }
 
     private List<T> selectByPageableDynamicQuery(DynamicQuery<T> dynamicQuery, Pageable pageable) {
