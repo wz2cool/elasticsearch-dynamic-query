@@ -6,8 +6,10 @@
 
     <groupId>com.github.wz2cool</groupId>
     <artifactId>elasticsearch-dynamic-query</artifactId>
-    <version>4.2.6</version>
+    <version>4.2.7</version>
     <packaging>jar</packaging>
+
+    <name>elasticsearch-dynamic-query</name>
 
     <organization>
         <name>wz2cool</name>
