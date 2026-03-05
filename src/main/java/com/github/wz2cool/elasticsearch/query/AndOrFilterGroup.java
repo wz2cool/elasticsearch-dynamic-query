@@ -24,6 +24,27 @@ public class AndOrFilterGroup<T, S extends AndOrFilterGroup<T, S>> extends AndFi
             Function<SingleFilterOperators<R>, IFilterOperator<R>> operatorFunc) {
         return orInternal(enable, getPropertyFunc, getSingleFilterOperators(), operatorFunc);
     }
+    
+    public <R extends Comparable> S or(
+            GetPropertyFunction<T, R> getPropertyFunc,
+            Function<SingleFilterOperators<R>, IFilterOperator<R>> operatorFunc,
+            float boost) {
+        return or(true, getPropertyFunc, operatorFunc, boost);
+    }
+
+    public <R extends Comparable> S or(
+            boolean enable,
+            GetPropertyFunction<T, R> getPropertyFunc,
+            Function<SingleFilterOperators<R>, IFilterOperator<R>> operatorFunc,
+            float boost) {
+        if (!enable) {
+            return (S) this;
+        }
+        final IFilterOperator<R> filterOperator = operatorFunc.apply(getSingleFilterOperators());
+        final QueryBuilder queryBuilder = filterOperator.buildQuery(getColumnName(getPropertyFunc));
+        booleanQueryBuilder.should(queryBuilder.boost(boost));
+        return (S) this;
+    }
 
     /// endregion
 
