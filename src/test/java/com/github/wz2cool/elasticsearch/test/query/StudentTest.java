@@ -73,7 +73,9 @@ public class StudentTest {
                 .and("student1", o -> o.multiMatch(StudentES::getName, StudentES::getNameWide))
                 .orderBy(StudentES::getId, asc());
         final NormPagingResult<StudentES> studentESNormPagingResult = studentEsDAO.selectByNormPaging(query);
-        assertTrue(studentESNormPagingResult.getList().size() > 1);
+        assertEquals(1, studentESNormPagingResult.getList().size());
+        assertEquals(1L, studentESNormPagingResult.getTotal());
+        assertEquals(Long.valueOf(1L), studentESNormPagingResult.getList().get(0).getId());
     }
 
     @Test
