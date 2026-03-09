@@ -18,10 +18,9 @@ import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FunctionScoreQuery;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.functionscore.FieldValueFactorFunctionBuilder;
-import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
-import org.elasticsearch.index.query.functionscore.RandomScoreFunctionBuilder;
-import org.elasticsearch.index.query.functionscore.WeightBuilder;
+import org.elasticsearch.index.query.functionscore.*;
+import org.elasticsearch.script.Script;
+import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
@@ -33,9 +32,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SourceFilter;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -300,6 +297,54 @@ public abstract class BaseDynamicQuery<T, S extends BaseFilterGroup<T, S>> exten
             this.functionScoreFunctions.add(new FunctionScoreFunction(filter, functionBuilder));
         }
 
+        return (S) this;
+    }
+
+    public S functionScoreScript(String script) {
+        return functionScoreScript(true, script, null);
+    }
+
+    public S functionScoreScript(boolean enable, String script) {
+        return functionScoreScript(enable, script, null);
+    }
+
+    public S functionScoreScript(String script, Map<String, Object> params) {
+        return functionScoreScript(true, script, params);
+    }
+
+    public S functionScoreScript(boolean enable, String script, Map<String, Object> params) {
+        if (enable) {
+            Script scriptObj;
+            if (params != null) {
+                scriptObj = new Script(ScriptType.INLINE, "painless", script, params);
+            } else {
+                scriptObj = new Script(ScriptType.INLINE, "painless", script, Collections.emptyMap());
+            }
+            ScriptScoreFunctionBuilder scriptScoreFunctionBuilder = new ScriptScoreFunctionBuilder(scriptObj);
+            FunctionScoreFunction function = new FunctionScoreFunction(scriptScoreFunctionBuilder);
+            this.functionScoreFunctions.add(function);
+        }
+        return (S) this;
+    }
+
+    public S functionScoreStoredScript(String scriptName, Map<String, Object> params) {
+        return functionScoreStoredScript(true, scriptName, params);
+    }
+
+    public S functionScoreStoredScript(boolean enable, String scriptName, Map<String, Object> params) {
+        if (enable) {
+            Script scriptObj;
+            if (params != null) {
+                // 对于存储脚本，使用ScriptType.STORED和脚本名称，不指定语言参数
+                scriptObj = new Script(ScriptType.STORED, null, scriptName, params);
+            } else {
+                // 对于存储脚本，使用ScriptType.STORED和脚本名称，不指定语言参数
+                scriptObj = new Script(ScriptType.STORED, null, scriptName, Collections.emptyMap());
+            }
+            ScriptScoreFunctionBuilder scriptScoreFunctionBuilder = new ScriptScoreFunctionBuilder(scriptObj);
+            FunctionScoreFunction function = new FunctionScoreFunction(scriptScoreFunctionBuilder);
+            this.functionScoreFunctions.add(function);
+        }
         return (S) this;
     }
 
