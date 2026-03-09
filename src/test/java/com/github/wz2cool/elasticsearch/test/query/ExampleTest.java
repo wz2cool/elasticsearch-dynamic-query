@@ -67,7 +67,10 @@ public class ExampleTest {
         NormPagingQuery<TestExampleES> query = NormPagingQuery.createQuery(TestExampleES.class, 2, 5)
                 .and(TestExampleES::getId, o -> o.gt(0L));
         final NormPagingResult<TestExampleES> testExampleESNormPagingResult = testExampleEsDAO.selectByNormPaging(query);
-        assertEquals(Long.valueOf(19), testExampleESNormPagingResult.getTotal());
+        assertEquals(20L, testExampleESNormPagingResult.getTotal());
+        assertEquals(4, testExampleESNormPagingResult.getPages());
+        assertEquals(5, testExampleESNormPagingResult.getList().size());
+        assertEquals(2, testExampleESNormPagingResult.getPageNum());
     }
 
     @Test
