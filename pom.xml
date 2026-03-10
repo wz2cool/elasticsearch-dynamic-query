@@ -10,6 +10,7 @@
     <packaging>jar</packaging>
 
     <name>elasticsearch-dynamic-query</name>
+    <url>https://github.com/wz2cool/elasticsearch-dynamic-query</url>
 
     <organization>
         <name>wz2cool</name>
@@ -49,8 +50,8 @@
     <scm>
         <connection>scm:git:git@github.com:wz2cool/elasticsearch-dynamic-query.git</connection>
         <developerConnection>scm:git:git@github.com:wz2cool/elasticsearch-dynamic-query.git</developerConnection>
-        <url>git@github.com:wz2cool/elasticsearch-dynamic-query.git</url>
-        <tag>master</tag>
+        <url>https://github.com/wz2cool/elasticsearch-dynamic-query</url>
+        <tag>HEAD</tag>
     </scm>
 
     <parent>
