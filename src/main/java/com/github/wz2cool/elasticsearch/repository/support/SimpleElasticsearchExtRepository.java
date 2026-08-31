@@ -15,11 +15,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.repository.support.ElasticsearchEntityInformation;
 import org.springframework.data.elasticsearch.repository.support.SimpleElasticsearchRepository;
 import org.springframework.util.CollectionUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +35,22 @@ import java.util.stream.Collectors;
  **/
 public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchRepository<T, I> implements ElasticsearchExtRepository<T, I> {
 
+    /**
+     * spring-data-elasticsearch 4.0.x 的 delete 返回 void，4.2.x 返回 ByQueryResponse，
+     * 方法描述符不同导致直接调用无法跨版本运行，故按方法名 + 参数类型反射解析。
+     */
+    private static final Method DELETE_BY_QUERY = resolveDeleteByQuery();
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static Method resolveDeleteByQuery() {
+        try {
+            return ElasticsearchOperations.class.getMethod(
+                    "delete", Query.class, Class.class, IndexCoordinates.class);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
 
     public SimpleElasticsearchExtRepository(ElasticsearchEntityInformation<T, I> metadata,
                                             ElasticsearchOperations elasticsearchOperations) {
@@ -65,7 +84,26 @@ public class SimpleElasticsearchExtRepository<T, I> extends SimpleElasticsearchR
             String json = dynamicQuery.buildQueryJson(nativeSearchQuery);
             logger.debug("deleteByDynamicQuery: {}{}", System.lineSeparator(), json);
         }
-        this.operations.delete(dynamicQuery.buildNativeSearch(), dynamicQuery.getClazz());
+        if (DELETE_BY_QUERY == null) {
+            throw new UnsupportedOperationException(
+                    "ElasticsearchOperations.delete(Query, Class, IndexCoordinates) not found");
+        }
+        final Class<T> clazz = dynamicQuery.getClazz();
+        try {
+            DELETE_BY_QUERY.invoke(this.operations, dynamicQuery.buildNativeSearch(), clazz,
+                    this.operations.getIndexCoordinatesFor(clazz));
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException("cannot access ElasticsearchOperations.delete", e);
+        } catch (InvocationTargetException e) {
+            final Throwable cause = e.getCause();
+            if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            }
+            if (cause instanceof Error) {
+                throw (Error) cause;
+            }
+            throw new IllegalStateException(cause);
+        }
     }
 
     @Override
